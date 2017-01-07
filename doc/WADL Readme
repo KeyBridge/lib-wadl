@@ -1,0 +1,14 @@
+Web Application Description Language
+
+W3C Member Submission 31 August 2009
+
+Latest version:   http://www.w3.org/Submission/wadl/
+
+WADL is designed to provide a machine process-able description of such HTTP-based Web applications.
+
+XML Schema for WADL
+
+A normative XML schema for the WADL vocabulary can be found at this link.
+https://www.w3.org/Submission/wadl/wadl.xsd
+
+
