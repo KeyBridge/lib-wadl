@@ -34,6 +34,7 @@ public class ApplicationTest {
      * Read the application.wadl file into a String.
      */
     URL url = getClass().getClassLoader().getResource("wadl/application.wadl");
+//    URL url = getClass().getClassLoader().getResource("wadl/amazonsearch.wadl");
     String wadlFile = new String(Files.readAllBytes(Paths.get(url.toURI())));
     /**
      * Unmarshal the string to an Application.
@@ -48,6 +49,32 @@ public class ApplicationTest {
     assert applicationXml != null;
 
     System.out.println("Marshal Application Entity to WADL XML OK");
+
+  }
+
+  @Test
+  public void testFinders() throws Exception {
+    /**
+     * Read the application.wadl file into a String.
+     */
+    URL url = getClass().getClassLoader().getResource("wadl/amazonsearch.wadl");
+    String wadlFile = new String(Files.readAllBytes(Paths.get(url.toURI())));
+    /**
+     * Unmarshal the string to an Application.
+     */
+    Application application = JaxbUtility.unmarshal(wadlFile, Application.class);
+
+    /**
+     * Get the 'transform' resource
+     */
+    Resource resource = application.findResource("xml");
+    System.out.println("FindResource " + resource + " OK");
+
+    /**
+     * Get the 'geocode' method. This should fail.
+     */
+    Method method = application.findMethod("#ItemSearch");
+    System.out.println("FindMethod " + method + " OK");
 
   }
 
