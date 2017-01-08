@@ -132,4 +132,46 @@ public class Application {
     return this.any;
   }
 
+  /**
+   * Scan the {@code resources} list (generally only one entry) for a single
+   * {@code resource} having the indicated path.
+   *
+   * @param path the path label
+   * @return the matching resource description
+   */
+  public Resource findResource(String path) {
+    /**
+     * Generally there will be only one Resources entry in the application,
+     * which declares the base path.
+     * <p>
+     * The 'resources' entry then contains a collection of 'resource' entries.
+     */
+    return getResources().iterator().next().getResource().stream()
+            .filter(resource -> resource.getPath().equals(path))
+            .reduce((a, b) -> {
+              throw new IllegalStateException("Multiple resources match " + path);
+            })
+            .get();
+  }
+
+  /**
+   * Scan the {@code methods} list and return the one (and only one) entry
+   * matching the provided {@code href} label. This supports WADL instances
+   * where the method description is separated from the resource description,
+   * rather than embedded. See the "amazonsearch.wadl" example in the testing
+   * resources for an example.
+   *
+   * @param href the method HREF label
+   * @return the matching method description
+   */
+  public Method findMethod(String href) {
+    String methodId = href.startsWith("#") ? href.substring(1, href.length()) : href;
+    return getMethods().stream()
+            .filter(method -> method.getId().equals(methodId))
+            .reduce((a, b) -> {
+              throw new IllegalStateException("Multiple methods match " + href);
+            })
+            .get();
+  }
+
 }
