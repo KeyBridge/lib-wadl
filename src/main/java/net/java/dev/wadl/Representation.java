@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,7 @@
 package net.java.dev.wadl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -32,8 +30,6 @@ public class Representation {
 
   protected List<Doc> doc;
   protected List<Param> param;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
@@ -48,8 +44,6 @@ public class Representation {
   protected String href;
   @XmlAttribute(name = "profile")
   protected List<String> profile;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
   public List<Doc> getDoc() {
     if (doc == null) {
@@ -63,13 +57,6 @@ public class Representation {
       param = new ArrayList<>();
     }
     return this.param;
-  }
-
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
   }
 
   public String getId() {
@@ -109,10 +96,6 @@ public class Representation {
       profile = new ArrayList<>();
     }
     return this.profile;
-  }
-
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
   }
 
 }
