@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,14 @@
  */
 package net.java.dev.wadl;
 
-import java.util.*;
+import ch.keybridge.lib.wadl.PathProvider;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.namespace.QName;
 
 /**
  * 2.6 Resource
@@ -33,7 +36,7 @@ import javax.xml.namespace.QName;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resource")
 @XmlRootElement(name = "resource")
-public class Resource {
+public class Resource implements PathProvider {
 
   /**
    * Zero or more doc elements - see section 2.3 .
@@ -78,9 +81,6 @@ public class Resource {
   @XmlElement(name = "resource")
   protected List<Resource> resources;
 
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
-
   /**
    * An optional attribute of type xsd:ID that identifies the resource element.
    */
@@ -114,9 +114,13 @@ public class Resource {
   @XmlAttribute(name = "path")
   protected String path;
 
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
+  /**
+   * The parent Resources instance.
+   */
+  @XmlTransient
+  private PathProvider parent;
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -145,14 +149,17 @@ public class Resource {
     return resources;
   }
 
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
-  }
-
+  /**
+   * Get the attribute of type xsd:ID that identifies the resource element.
+   * <p>
+   * If the ID is not set then a random UUID is provided.
+   *
+   * @return a non-null unique identifier
+   */
   public String getId() {
+    if (id == null) {
+      id = UUID.randomUUID().toString();
+    }
     return id;
   }
 
@@ -179,16 +186,55 @@ public class Resource {
     this.queryType = value;
   }
 
+  /**
+   * {@inheritDoc }
+   */
+  @Override
   public String getPath() {
     return path;
   }
 
   public void setPath(String value) {
     this.path = value;
+  }//</editor-fold>
+
+  /**
+   * Get the parent Resources instance.
+   *
+   * @return the parent Resources instance
+   */
+  public PathProvider getParent() {
+    return parent;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  /**
+   * Set the parent Resources instance.
+   *
+   * @param parent the parent Resources instance
+   */
+  public void setParent(PathProvider parent) {
+    this.parent = parent;
+  }
+
+  /**
+   * {@inheritDoc }
+   */
+  @Override
+  public String buildPath() {
+    return parent != null ? parent.buildPath() + "/" + path : path;
+  }
+
+  /**
+   * Call PostLoad on all children.
+   */
+  public void postLoad() {
+    for (Resource resource : getResources()) {
+      resource.setParent(this);
+      resource.postLoad();
+    }
+    for (Method method : getMethods()) {
+      method.setParent(this);
+    }
   }
 
   @Override

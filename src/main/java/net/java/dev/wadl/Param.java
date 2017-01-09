@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,9 +17,8 @@
 package net.java.dev.wadl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -33,8 +32,6 @@ public class Param {
   protected List<Doc> doc;
   protected List<Option> option;
   protected Link link;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
   @XmlAttribute(name = "href")
   @XmlSchemaType(name = "anyURI")
   protected String href;
@@ -61,9 +58,8 @@ public class Param {
   protected String fixed;
   @XmlAttribute(name = "path")
   protected String path;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -84,13 +80,6 @@ public class Param {
 
   public void setLink(Link value) {
     this.link = value;
-  }
-
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
   }
 
   public String getHref() {
@@ -183,10 +172,33 @@ public class Param {
 
   public void setPath(String value) {
     this.path = value;
+  }//</editor-fold>
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 41 * hash + Objects.hashCode(this.name);
+    return hash;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Param other = (Param) obj;
+    return Objects.equals(this.name, other.name);
+  }
+
+  @Override
+  public String toString() {
+    return name;
   }
 
 }

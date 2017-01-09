@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,29 +16,25 @@
  */
 package net.java.dev.wadl;
 
+import ch.keybridge.lib.wadl.PathProvider;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import javax.xml.bind.annotation.*;
-import javax.xml.namespace.QName;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resources")
 @XmlRootElement(name = "resources")
-public class Resources {
+public class Resources implements PathProvider {
 
   protected List<Doc> doc;
   @XmlElement(required = true)
   protected List<Resource> resource;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
   @XmlAttribute(name = "base")
   @XmlSchemaType(name = "anyURI")
   protected String base;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -53,23 +49,75 @@ public class Resources {
     return this.resource;
   }
 
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
-  }
-
   public String getBase() {
     return base;
   }
 
   public void setBase(String value) {
     this.base = value;
+  }//</editor-fold>
+
+  /**
+   * {@inheritDoc }
+   */
+  @Override
+  public String getPath() {
+    return base;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  /**
+   * {@inheritDoc }
+   */
+  @Override
+  public String buildPath() {
+    return base;
+  }
+
+  /**
+   * Call PostLoad on all children.
+   */
+  public void postLoad() {
+    for (Resource resource : getResource()) {
+      resource.setParent(this);
+      resource.postLoad();
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.base);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Resources other = (Resources) obj;
+    return Objects.equals(this.base, other.base);
+  }
+
+  @Override
+  public String toString() {
+    return base;
+  }
+
+  /**
+   * {@inheritDoc }
+   *
+   * @deprecated NOT valid for Resources type.
+   */
+  @Override
+  public List<Param> getParam() {
+    return new ArrayList<>();
   }
 
 }

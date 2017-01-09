@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,13 @@
  */
 package net.java.dev.wadl;
 
-import java.util.*;
+import ch.keybridge.lib.wadl.PathProvider;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.namespace.QName;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "method")
@@ -30,8 +32,6 @@ public class Method {
   protected List<Doc> doc;
   protected Request request;
   protected List<Response> response;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
@@ -42,9 +42,14 @@ public class Method {
   @XmlAttribute(name = "href")
   @XmlSchemaType(name = "anyURI")
   protected String href;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
+  /**
+   * The parent Resources instance.
+   */
+  @XmlTransient
+  private PathProvider parent;
+
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -65,13 +70,6 @@ public class Method {
       response = new ArrayList<>();
     }
     return this.response;
-  }
-
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
   }
 
   public String getId() {
@@ -96,10 +94,33 @@ public class Method {
 
   public void setHref(String value) {
     this.href = value;
+  }//</editor-fold>
+
+  /**
+   * Get the parent Resources instance.
+   *
+   * @return the parent Resources instance
+   */
+  public PathProvider getParent() {
+    return parent;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  /**
+   * Set the parent Resources instance.
+   *
+   * @param parent the parent Resources instance
+   */
+  public void setParent(PathProvider parent) {
+    this.parent = parent;
+  }
+
+  /**
+   * Get the fully qualified URI pattern to call this methods.
+   *
+   * @return the URI pattern for this method.
+   */
+  public String getPath() {
+    return parent != null ? parent.buildPath() : "";
   }
 
   @Override
