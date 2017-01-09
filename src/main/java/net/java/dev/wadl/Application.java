@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -80,17 +80,7 @@ public class Application {
   @XmlElement(name = "param")
   protected List<Param> params;
 
-  // the default compiled version
-//  @XmlElements({
-//    @XmlElement(name = "resource_type", type = ResourceType.class),
-//    @XmlElement(name = "method", type = Method.class),
-//    @XmlElement(name = "representation", type = Representation.class),
-//    @XmlElement(name = "param", type = Param.class)
-//  })
-//  protected List<Object> elements;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
-
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -139,13 +129,27 @@ public class Application {
       params = new ArrayList<>();
     }
     return params;
+  }//</editor-fold>
+
+  /**
+   * Call PostLoad on all children.
+   */
+  public void postLoad() {
+    for (Resources resource : getResources()) {
+      resource.postLoad();
+    }
   }
 
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
+  /**
+   * Get the FIRST {@code Resources} entry in this application.
+   * <p>
+   * Generally there will be only one Resources entry in the application, which
+   * declares the base path.
+   *
+   * @return the FIRST {@code Resources} entry
+   */
+  public Resources getBaseResource() {
+    return getResources().iterator().next();
   }
 
   /**
