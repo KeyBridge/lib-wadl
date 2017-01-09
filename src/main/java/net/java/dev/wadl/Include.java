@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,23 +16,40 @@
  */
 package net.java.dev.wadl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import javax.xml.bind.annotation.*;
-import javax.xml.namespace.QName;
 
+/**
+ * 2.4.1 Include
+ * <p>
+ * The include element allows the definitions of one or more data format
+ * descriptions to be included by reference. Use of the include element is
+ * logically equivalent to in-lining the referenced document within the WADL
+ * grammars element.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "include")
 @XmlRootElement(name = "include")
 public class Include {
 
+  /**
+   * Zero or more doc elements - see section 2.3 .
+   * <p>
+   * Provides a short plain text description of the element being documented,
+   * the value SHOULD be suitable for use as a title for the contained
+   * documentation.
+   */
   protected List<Doc> doc;
+  /**
+   * The href attribute provides a URI for the referenced definitions and is of
+   * type xsd:anyURI.
+   */
   @XmlAttribute(name = "href")
   @XmlSchemaType(name = "anyURI")
   protected String href;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
   public List<Doc> getDoc() {
     return doc;
@@ -50,8 +67,31 @@ public class Include {
     this.href = href;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.href);
+    return hash;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Include other = (Include) obj;
+    return Objects.equals(this.href, other.href);
+  }
+
+  @Override
+  public String toString() {
+    return href;
   }
 
 }

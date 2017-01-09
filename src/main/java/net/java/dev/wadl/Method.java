@@ -24,21 +24,69 @@ import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+/**
+ * 2.8 Method
+ * <p>
+ * A method element describes the input to and output from an HTTP protocol
+ * method that may be applied to a resource. A method element can either be a
+ * method definition or a reference to a method defined elsewhere.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "method")
 @XmlRootElement(name = "method")
 public class Method {
 
+  /**
+   * Zero or more doc elements - see section 2.3 Documentation.
+   * <p>
+   * The doc element has mixed content and may contain text and zero or more
+   * child elements that form the body of the documentation.
+   */
   protected List<Doc> doc;
+  /**
+   * Describes the input to the method as a collection of parameters and an
+   * optional resource representation - see section 2.9 . A request element
+   * describes the input to be included when applying an HTTP method to a
+   * resource.
+   */
   protected Request request;
+  /**
+   * Zero or more response elements that describe the possible outputs of the
+   * method - see section 2.10. A response element describes the output that
+   * results from performing an HTTP method on a resource.
+   */
   protected List<Response> response;
+  /**
+   * An identifier for the method, required for globally defined methods, not
+   * allowed on locally embedded methods. Methods are identified by an XML ID
+   * and are referred to using a URI reference.
+   */
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
   @XmlSchemaType(name = "ID")
   protected String id;
+  /**
+   * Indicates the HTTP method used.
+   * <p>
+   * It is permissible to have multiple child method elements that have the same
+   * value of the name attribute for a given resource; such siblings represent
+   * distinct variations of the same HTTP method and will typically have
+   * different input data.
+   */
   @XmlAttribute(name = "name")
-  protected String name;
+  protected HTTPMethods name;
+  /**
+   * 2.8.1 Method Reference
+   * <p>
+   * A method reference element is a child of a resource element that has an
+   * href attribute whose type is xsd:anyURI. The value of the href attribute is
+   * a cross reference (see section 2.1 ) to a method definition element. A
+   * method reference element MUST NOT have any other WADL-defined attributes or
+   * contain any WADL-defined child elements.
+   */
   @XmlAttribute(name = "href")
   @XmlSchemaType(name = "anyURI")
   protected String href;
@@ -80,11 +128,11 @@ public class Method {
     this.id = value;
   }
 
-  public String getName() {
+  public HTTPMethods getName() {
     return name;
   }
 
-  public void setName(String value) {
+  public void setName(HTTPMethods value) {
     this.name = value;
   }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,36 +16,61 @@
  */
 package net.java.dev.wadl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.namespace.QName;
 
+/**
+ * 2.12.4 Link
+ * <p>
+ * A link element is used to identify links to resources within representations.
+ * A link element is a child of a param element whose path attribute identifies
+ * the portion of its parent representation that contains a link URI.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "link")
 @XmlRootElement(name = "link")
 public class Link {
 
+  /**
+   * A link element contains zero or more doc elements (see section 2.3).
+   */
   protected List<Doc> doc;
   @XmlAnyElement(lax = true)
   protected List<Object> any;
+  /**
+   * An optional cross reference (see section 2.1) to a resource_type element
+   * that defines the capabilities of the resource that the link identifies.
+   */
   @XmlAttribute(name = "resource_type")
   @XmlSchemaType(name = "anyURI")
   protected String resourceType;
+  /**
+   * An optional token that identifies the relationship of the resource
+   * identified by the link to the resource whose representation the link is
+   * embedded in. The value is scoped by the value of the ancestor
+   * representation element's profile attribute.
+   */
   @XmlAttribute(name = "rel")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "token")
   protected String rel;
+  /**
+   * An optional token that identifies the relationship of the resource whose
+   * representation the link is embedded in to the resource identified by the
+   * link. This is the reverse relationship to that identified by the rel
+   * attribute. The value is scoped by the value of the ancestor representation
+   * element's profile attribute.
+   */
   @XmlAttribute(name = "rev")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlSchemaType(name = "token")
   protected String rev;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     return doc;
   }
@@ -84,10 +109,6 @@ public class Link {
 
   public void setRev(String rev) {
     this.rev = rev;
-  }
-
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
-  }
+  }//</editor-fold>
 
 }

@@ -49,18 +49,31 @@ public class Resource implements PathProvider {
   /**
    * Zero or more param elements (see section 2.12 ) with one of the following
    * values for its style attribute:
-   * <ul>
-   * <li>template: Provides additional information about an embedded template
-   * parameter, see above. Child param elements whose name attribute value does
-   * not match the name of an embedded template parameter are ignored.</li>
-   * <li>matrix: Specifies a matrix URI parameter</li>
-   * <li>query: Specifies a global URI query parameter for all child method
-   * elements of the resource. Does not apply to methods inherited from a
-   * resource_type specified using the type attribute.</li>
-   * <li>header: Specifies a global HTTP header for use in the request part of
-   * all child method elements of the resource. Does not apply to methods
-   * inherited from a resource_type specified using the type attribute.
-   * </li></ul>
+   * <dl>
+   * <dt><code>template</code></dt>
+   * <dd>Provides additional information about an embedded template parameter,
+   * see above. Child <code>param</code> elements whose <code>name</code>
+   * attribute value does not match the <code>name</code> of an embedded
+   * template parameter are ignored.</dd>
+   * <dt><code>matrix</code></dt>
+   * <dd>Specifies a matrix URI parameter</dd>
+   * <dt><code>query</code></dt>
+   * <dd>Specifies a global URI query parameter for all child
+   * <code>method</code> elements of the resource. Does not apply to methods
+   * inherited from a <code>resource_type</code> specified using the
+   * <code>type</code> attribute.</dd>
+   * <dt><code>header</code></dt>
+   * <dd>Specifies a global HTTP header for use in the request part of all child
+   * <code>method</code> elements of the resource. Does not apply to methods
+   * inherited from a <code>resource_type</code> specified using the
+   * <code>type</code> attribute.</dd>
+   * </dl>
+   * <p>
+   * Additional information about embedded template parameters can be conveyed
+   * using a child param element with a style attribute value 'template' whose
+   * name attribute value matches the name of the parameter embedded in the
+   * template. E.g., in the following the type of the widgetId template
+   * parameter is specified by the child param element.
    */
   protected List<Param> param;
   /**
@@ -110,6 +123,11 @@ public class Resource implements PathProvider {
    * relative URI template for the identifier of the resource. The resource's
    * base URI is given by the resource element's parent resource or resources
    * element.
+   * <p>
+   * The value of the path attribute may be static or may contain embedded
+   * template parameters. At runtime, the values of template parameters are
+   * substituted into the resource identifier when the resource is used, see
+   * section 2.6.1 for a detailed example.
    */
   @XmlAttribute(name = "path")
   protected String path;

@@ -20,17 +20,52 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.*;
 
+/**
+ * 2.10 Response
+ * <p>
+ * A response element describes the output that results from performing an HTTP
+ * method on a resource.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "response")
 @XmlRootElement(name = "response")
 public class Response {
 
+  /**
+   * Zero or more doc elements - see section 2.3 Documentation.
+   * <p>
+   * The doc element has mixed content and may contain text and zero or more
+   * child elements that form the body of the documentation.
+   */
   protected List<Doc> doc;
+  /**
+   * Zero or more param elements (see section 2.12 ) with a value of 'header'
+   * for their style attribute, each of which specifies the details of a HTTP
+   * header for the response
+   */
   protected List<Param> param;
+  /**
+   * Zero or more representation elements (see section 2.11 ), each of which
+   * describes a resource representation that may result from performing the
+   * method. Sibling representation elements indicate logically equivalent
+   * alternatives; normal HTTP content negotiation mechanisms may be used to
+   * select a particular alternative.
+   * <p>
+   * A representation element describes a representation of a resource's state.
+   * A representation element can either be a representation definition or a
+   * reference to a representation defined elsewhere.
+   */
   protected List<Representation> representation;
+  /**
+   * Optionally present on responses, provides a list of HTTP status codes
+   * associated with a particular response.
+   */
   @XmlAttribute(name = "status")
   protected List<Long> status;
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -57,6 +92,6 @@ public class Response {
       status = new ArrayList<>();
     }
     return this.status;
-  }
+  }//</editor-fold>
 
 }

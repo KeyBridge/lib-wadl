@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,12 @@ package net.java.dev.wadl;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * The HTTP methods that can be applied to each resource, the expected inputs
+ * and outputs and their supported formats.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlType(name = "HTTPMethods")
 @XmlEnum
 public enum HTTPMethods {

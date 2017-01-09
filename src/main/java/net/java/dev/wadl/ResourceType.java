@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,37 +16,68 @@
  */
 package net.java.dev.wadl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.namespace.QName;
 
+/**
+ * 2.7 Resource Type
+ * <p>
+ * A resource_type element describes a set of methods that, together, define the
+ * behavior of a type of resource. A resource_type may be used to define
+ * resource behavior that is expected to be supported by multiple resources.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resource_type")
 @XmlRootElement(name = "resource_type")
 public class ResourceType {
 
+  /**
+   * Zero or more doc elements - see section 2.3 .
+   * <p>
+   * Provides a short plain text description of the element being documented,
+   * the value SHOULD be suitable for use as a title for the contained
+   * documentation.
+   */
   protected List<Doc> doc;
+  /**
+   * Zero or more param elements (see section 2.12 ) with one of the following
+   * values for its style attribute:
+   * <dl>
+   * <dt><code>query</code></dt>
+   * <dd>Specifies a URI query parameter for all child <code>method</code>
+   * elements of the resource type.</dd>
+   * <dt><code>header</code></dt>
+   * <dd>Specifies a HTTP header for use in the request part of all child
+   * <code>method</code> elements of the resource type.</dd>
+   * </dl>
+   */
   protected List<Param> param;
-  @XmlElements({
-    @XmlElement(name = "method", type = Method.class),
-    @XmlElement(name = "resource", type = Resource.class)
-  })
-  protected List<Object> methodOrResource;
-  @XmlAnyElement(lax = true)
-  protected List<Object> any;
+  /**
+   * Zero or more method (see section 2.8 ) elements, each of which describes an
+   * HTTP protocol method that can be applied to a resource of this type.
+   */
+  protected List<Object> method;
+  /**
+   * Zero or more resource elements that describe sub-resources of resources of
+   * this type. The URI of such sub-resources is provided by the path attribute
+   * of the resource element and is relative to that of the parent resource.
+   */
+  protected List<Object> resource;
+  /**
+   * A required attribute of type xsd:ID that identifies the resource_type
+   * element.
+   */
   @XmlAttribute(name = "id")
   @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
   @XmlID
   @XmlSchemaType(name = "ID")
   protected String id;
-  @XmlAnyAttribute
-  private final Map<QName, String> otherAttributes = new HashMap<>();
 
+  //<editor-fold defaultstate="collapsed" desc="Getter and Setter">
   public List<Doc> getDoc() {
     if (doc == null) {
       doc = new ArrayList<>();
@@ -61,30 +92,39 @@ public class ResourceType {
     return this.param;
   }
 
-  public List<Object> getMethodOrResource() {
-    if (methodOrResource == null) {
-      methodOrResource = new ArrayList<>();
-    }
-    return this.methodOrResource;
-  }
-
-  public List<Object> getAny() {
-    if (any == null) {
-      any = new ArrayList<>();
-    }
-    return this.any;
-  }
-
   public String getId() {
     return id;
   }
 
   public void setId(String value) {
     this.id = value;
+  }//</editor-fold>
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 37 * hash + Objects.hashCode(this.id);
+    return hash;
   }
 
-  public Map<QName, String> getOtherAttributes() {
-    return otherAttributes;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final ResourceType other = (ResourceType) obj;
+    return Objects.equals(this.id, other.id);
+  }
+
+  @Override
+  public String toString() {
+    return id;
   }
 
 }

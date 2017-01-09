@@ -22,14 +22,38 @@ import java.util.List;
 import java.util.Objects;
 import javax.xml.bind.annotation.*;
 
+/**
+ * 2.5 Resources
+ * <p>
+ * The resources element acts as a container for the resources provided by the
+ * application. A resources element has a base attribute of type xsd:anyURI that
+ * provides the base URI for each child resource identifier. Descendent resource
+ * elements (see section 2.6 ) describe the resources provided by the
+ * application.
+ *
+ * @author Key Bridge LLC
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resources")
 @XmlRootElement(name = "resources")
 public class Resources implements PathProvider {
 
+  /**
+   * Zero or more doc elements - see section 2.3 Documentation.
+   * <p>
+   * The doc element has mixed content and may contain text and zero or more
+   * child elements that form the body of the documentation.
+   */
   protected List<Doc> doc;
+  /**
+   * A resource element describes a set of resources, each identified by a URI
+   * that follows a common pattern.
+   */
   @XmlElement(required = true)
   protected List<Resource> resource;
+  /**
+   * The base URI for each child resource identifier.
+   */
   @XmlAttribute(name = "base")
   @XmlSchemaType(name = "anyURI")
   protected String base;

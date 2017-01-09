@@ -21,6 +21,8 @@ import java.util.List;
 import javax.xml.bind.annotation.*;
 
 /**
+ * 2.2 Application
+ * <p>
  * The application element forms the root of a WADL description.
  *
  * @author Key Bridge LLC
@@ -31,7 +33,9 @@ import javax.xml.bind.annotation.*;
 public class Application {
 
   /**
-   * Provides a short plain text description of the element being documented.
+   * Provides a short plain text description of the element being documented,
+   * the value SHOULD be suitable for use as a title for the contained
+   * documentation.
    */
   protected List<Doc> doc;
   /**

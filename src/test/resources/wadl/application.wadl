@@ -1,506 +1,506 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://wadl.dev.java.net/2009/02">
-    <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.22.1 2015-10-07 10:54:41"/>
-    <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://keybridgewireless.com/gis/rest/application.wadl?detail=true"/>
-    <grammars>
-        <include href="application.wadl/xsd0.xsd">
-            <doc title="Generated" xml:lang="en"/>
-        </include>
-    </grammars>
-    <resources base="http://keybridgewireless.com/gis/rest/">
-        <resource path="elevation">
-            <resource path="coveragedetail/{model}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="template" type="xs:string"/>
-                <method id="coverageDetail" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="elevation" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="coverage/{model}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="template" type="xs:string"/>
-                <method id="coverage" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="boundary">
-            <resource path="tract/{geoid}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="geoid" style="template" type="xs:string"/>
-                <method id="tract" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="county/{geoid}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="geoid" style="template" type="xs:string"/>
-                <method id="county" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="timezone/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="timeZone" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="counties/{state}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="state" style="template" type="xs:string"/>
-                <method id="counties" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="tracts">
-                <method id="tracts" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="state" style="query" type="xs:string"/>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="county" style="query" type="xs:string"/>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="tracts/intersect">
-                <method id="tractIntersect" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="country/{country}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
-                <method id="border" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="country/{country}/contains/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="borderContains" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="country/{country}/intersection">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
-                <method id="borderIntersection" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="state/{query}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="query" style="template" type="xs:string"/>
-                <method id="state" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="transform">
-            <resource path="nad27/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="nad27" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="nad83/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="nad83" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="landcover">
-            <resource path="{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="landCover" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="complete" style="query" type="xs:boolean" default="false"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="geocode">
-            <resource path="reverse/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="geocode" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="forward/{location}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="location" style="template" type="xs:string"/>
-                <method id="geocode" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="ip">
-                <method id="autolocation" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="ip/{ipaddress}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ipaddress" style="template" type="xs:string"/>
-                <method id="ipAddress" name="GET">
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="gazeteer">
-            <resource path="search/{featureName}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="featureName" style="template" type="xs:string"/>
-                <method id="gazeteer" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="calculate">
-            <resource path="distance/{startLatitude}/{startLongitude}/{stopLatitude}/{stopLongitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLatitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLatitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLongitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLongitude" style="template" type="xs:double"/>
-                <method id="distance" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="area">
-                <method id="area" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="simplify">
-                <method id="simplify" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="address">
-                <method id="parsePost" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISAddress" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISAddress" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="crs/{epsgCode}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="epsgCode" style="template" type="xs:string"/>
-                <method id="decodeCRS" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="haat/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="haat" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="maxhaat/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="maxHaat" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="radialhaat/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="radialHaat" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="haat/explain/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="explain" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="path/{startLatitude}/{startLongitude}/{stopLatitude}/{stopLongitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLatitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLatitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLongitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLongitude" style="template" type="xs:double"/>
-                <method id="path" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="p" style="query" type="xs:int"/>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="address/{address}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="address" style="template" type="xs:string"/>
-                <method id="parse" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="buffer/{radius}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="radius" style="template" type="xs:double"/>
-                <method id="buffer" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-        <resource path="cbrs">
-            <resource path="all">
-                <method id="cbrsZones" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="contains/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="cbrsContains" name="GET">
-                    <request>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="text/plain"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="intersect/{latitude}/{longitude}">
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
-                <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
-                <method id="cbrsIntersect" name="GET">
-                    <request>
-                        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-            <resource path="difference">
-                <method id="cbrsDifference" name="POST">
-                    <request>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
-                        <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
-                    </request>
-                    <response>
-                        <representation mediaType="application/xml"/>
-                        <representation mediaType="application/json"/>
-                    </response>
-                </method>
-            </resource>
-        </resource>
-    </resources>
+  <doc xmlns:jersey="http://jersey.java.net/" jersey:generatedBy="Jersey: 2.22.1 2015-10-07 10:54:41"/>
+  <doc xmlns:jersey="http://jersey.java.net/" jersey:hint="This is simplified WADL with user and core resources only. To get full WADL with extended resources use the query parameter detail. Link: http://keybridgewireless.com/gis/rest/application.wadl?detail=true"/>
+  <grammars>
+    <include href="application.wadl/xsd0.xsd">
+      <doc title="Generated" xml:lang="en"/>
+    </include>
+  </grammars>
+  <resources base="http://keybridgewireless.com/gis/rest/">
+    <resource path="elevation">
+      <resource path="coveragedetail/{model}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="template" type="xs:string"/>
+        <method id="coverageDetail" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="elevation" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="coverage/{model}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="template" type="xs:string"/>
+        <method id="coverage" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="boundary">
+      <resource path="tract/{geoid}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="geoid" style="template" type="xs:string"/>
+        <method id="tract" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="county/{geoid}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="geoid" style="template" type="xs:string"/>
+        <method id="county" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="timezone/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="timeZone" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="counties/{state}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="state" style="template" type="xs:string"/>
+        <method id="counties" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="tracts">
+        <method id="tracts" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="state" style="query" type="xs:string"/>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="county" style="query" type="xs:string"/>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="tracts/intersect">
+        <method id="tractIntersect" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="country/{country}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
+        <method id="border" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="country/{country}/contains/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="borderContains" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="country/{country}/intersection">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="country" style="template" type="xs:string"/>
+        <method id="borderIntersection" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="state/{query}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="query" style="template" type="xs:string"/>
+        <method id="state" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="transform">
+      <resource path="nad27/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="nad27" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="nad83/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="nad83" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="landcover">
+      <resource path="{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="landCover" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="complete" style="query" type="xs:boolean" default="false"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="geocode">
+      <resource path="reverse/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="geocode" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="forward/{location}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="location" style="template" type="xs:string"/>
+        <method id="geocode" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="ip">
+        <method id="autolocation" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="ip/{ipaddress}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="ipaddress" style="template" type="xs:string"/>
+        <method id="ipAddress" name="GET">
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="gazeteer">
+      <resource path="search/{featureName}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="featureName" style="template" type="xs:string"/>
+        <method id="gazeteer" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="calculate">
+      <resource path="distance/{startLatitude}/{startLongitude}/{stopLatitude}/{stopLongitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLatitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLatitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLongitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLongitude" style="template" type="xs:double"/>
+        <method id="distance" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="area">
+        <method id="area" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="simplify">
+        <method id="simplify" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="address">
+        <method id="parsePost" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISAddress" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISAddress" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="crs/{epsgCode}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="epsgCode" style="template" type="xs:string"/>
+        <method id="decodeCRS" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="haat/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="haat" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="maxhaat/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="maxHaat" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="radialhaat/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="radialHaat" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="haat/explain/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="explain" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="path/{startLatitude}/{startLongitude}/{stopLatitude}/{stopLongitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLatitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLatitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="stopLongitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="startLongitude" style="template" type="xs:double"/>
+        <method id="path" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="p" style="query" type="xs:int"/>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="model" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="address/{address}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="address" style="template" type="xs:string"/>
+        <method id="parse" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="buffer/{radius}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="radius" style="template" type="xs:double"/>
+        <method id="buffer" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+    <resource path="cbrs">
+      <resource path="all">
+        <method id="cbrsZones" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="contains/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="cbrsContains" name="GET">
+          <request>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="text/plain"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="intersect/{latitude}/{longitude}">
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="latitude" style="template" type="xs:double"/>
+        <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="longitude" style="template" type="xs:double"/>
+        <method id="cbrsIntersect" name="GET">
+          <request>
+            <param xmlns:xs="http://www.w3.org/2001/XMLSchema" name="format" style="query" type="xs:string"/>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+      <resource path="difference">
+        <method id="cbrsDifference" name="POST">
+          <request>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/xml"/>
+            <ns2:representation xmlns:ns2="http://wadl.dev.java.net/2009/02" xmlns="" element="GISFeature" mediaType="application/json"/>
+          </request>
+          <response>
+            <representation mediaType="application/xml"/>
+            <representation mediaType="application/json"/>
+          </response>
+        </method>
+      </resource>
+    </resource>
+  </resources>
 </application>
