@@ -70,7 +70,10 @@ public class Resources implements PathProvider {
    */
   @Override
   public String buildPath() {
-    return base;
+    /**
+     * Strip the trailing slash.
+     */
+    return base.endsWith("/") ? base.substring(0, base.length() - 1) : base;
   }
 
   /**
