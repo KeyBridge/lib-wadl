@@ -61,6 +61,8 @@ public class Response {
   /**
    * Optionally present on responses, provides a list of HTTP status codes
    * associated with a particular response.
+   * <p>
+   * If none is provided then 200 may be assumed.
    */
   @XmlAttribute(name = "status")
   protected List<Long> status;
@@ -87,11 +89,28 @@ public class Response {
     return this.representation;
   }
 
+  /**
+   * Get the list of HTTP status codes associated with a particular response.
+   * <p>
+   * If none are provided then 200 may be assumed.
+   *
+   * @return a non-null ArrayList
+   */
   public List<Long> getStatus() {
     if (status == null) {
       status = new ArrayList<>();
     }
     return this.status;
   }//</editor-fold>
+
+  /**
+   * Get the FIRST doc entry. If no DOC entries are present then an empty Doc
+   * instance is returned.
+   *
+   * @return a non-null Doc instance.
+   */
+  public Doc getFirstDoc() {
+    return getDoc().isEmpty() ? new Doc() : getDoc().iterator().next();
+  }
 
 }
