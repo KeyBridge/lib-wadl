@@ -1,15 +1,18 @@
-/*
- * Copyright 2017 Key Bridge LLC. All rights reserved.
- * Use is subject to license terms.
+/* 
+ * Copyright (C) 2017 Key Bridge LLC
  *
- * Software Code is protected by Copyrights. Author hereby reserves all rights
- * in and to Copyrights and no license is granted under Copyrights in this
- * Software License Agreement.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * Key Bridge LLC generally licenses Copyrights for commercialization pursuant to
- * the terms of either a Standard Software Source Code License Agreement or a
- * Standard Product License Agreement. A copy of either Agreement can be
- * obtained upon request from: info@keybridgewireless.com
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ch.keybridge.lib.wadl.bean;
 
