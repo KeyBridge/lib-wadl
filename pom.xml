@@ -27,10 +27,12 @@
     v0.2.0 - add javadoc to all entity fields, add parent/child object tree navigation
 
   </description>
+
   <organization>
     <name>Key Bridge</name>
     <url>http://keybridge.ch</url>
   </organization>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -48,7 +50,6 @@
       <groupId>keybridge.lib</groupId>
       <artifactId>xml-adapter</artifactId>
       <version>1.0.0</version>
-      <scope>test</scope>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -57,6 +58,13 @@
       <version>2.0.1</version>
       <scope>test</scope>
       <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>javax</groupId>
+      <artifactId>javaee-web-api</artifactId>
+      <version>7.0</version>
+      <type>jar</type>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <distributionManagement>
