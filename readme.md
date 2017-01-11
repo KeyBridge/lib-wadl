@@ -55,13 +55,17 @@ This resource is designed for web applications using Java Server Faces.
 <pre>
   wadl=http://[rest-resource]/application.wadl</pre>
 
-4. In a JSF page, use the WADL component. e.g.
+4. In a JSF page, add the WADL CSS and use the WADL component. e.g.
 <pre>
+  &lt;link rel="stylesheet" href="wadl.css"/&gt;
+
   &lt;ui:repeat value="#{wadlBean.findMethods(param['path'])}" var="m"&gt;
     &lt;wadl:method method="#{m}"
               verbose="true"
               collapsible="true"/&gt;
   &lt;/ui:repeat&gt;</pre>
+
+A copy of the required **wadl.css** is provided in the **doc/example** directory.
 
 More: Familiarize yourself with the WADL specification then inspect the **WadlBean**
 managed bean for more information examples.

@@ -1,0 +1,11 @@
+.rest-button{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1.3em;
+  width: 6em;
+}
+.rest-label{
+  margin-left: 4em;
+}

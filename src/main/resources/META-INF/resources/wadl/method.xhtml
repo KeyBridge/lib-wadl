@@ -16,8 +16,9 @@
     <cc:attribute name="verbose" required="false" default="false" type="java.lang.Boolean" displayName="Whether to log warnings when a label is not found."/>
   </cc:interface>
 
-  <!--  rest-button and rest-label styles are embedded. These should be placed in a
-  CSS file if a clever way can be found to load the CSS only once.-->
+  <!--you must add the following CSS somewhere in your app.-->
+  <!--.rest-button{ position: absolute; top: 0; left: 0; height: 100%; padding: 1.3em; width: 6em; }-->
+  <!--.rest-label{ margin-left: 4em; }-->
 
   <!-- IMPLEMENTATION -->
   <cc:implementation>
@@ -29,9 +30,8 @@
           <div class="panel-heading" style="position: relative; white-space: nowrap">
             <div class="pull-left">
               <h:panelGroup rendered="#{!cc.attrs.collapsible}">
-                <span class="rest-button label label-#{wadlBean.buildCSSType(cc.attrs.method.name)}"
-                      style="position: absolute; top: 0; left: 0; height: 100%; padding: 1.3em; width: 6em;">#{cc.attrs.method.name}</span>
-                <div class="rest-label" style="margin-left: 4em;">
+                <span class="rest-button label label-#{wadlBean.buildCSSType(cc.attrs.method.name)}">#{cc.attrs.method.name}</span>
+                <div class="rest-label">
                   <h:outputText value="#{cc.attrs.method.id}" styleClass="text-#{wadlBean.buildCSSType(cc.attrs.method.name)}" style="margin-left: 1em;"/>
                 </div>
               </h:panelGroup>
