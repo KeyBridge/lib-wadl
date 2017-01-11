@@ -20,6 +20,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.xml.bind.JAXBException;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -63,6 +64,13 @@ public class ApplicationTest {
      * Unmarshal the string to an Application.
      */
     Application application = JaxbUtility.unmarshal(wadlFile, Application.class);
+
+    /**
+     * Get the top-level Resources
+     */
+    Resources r = application.findResources("http://webservices.amazon.com/onca/");
+    Assert.assertNotNull(r);
+    System.out.println("FindResources " + r + " OK");
 
     /**
      * Get the 'transform' resource
