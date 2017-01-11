@@ -157,6 +157,21 @@ public class Application {
   }
 
   /**
+   * Find a resources entry matching the provided URI base.
+   *
+   * @param base the URI base. A slash is automatically appended if not present
+   * @return the matched Resources instance
+   */
+  public Resources findResources(String base) {
+    return getResources().stream()
+            .filter(r -> r.getBase().equalsIgnoreCase(base))
+            .reduce((a, b) -> {
+              throw new IllegalStateException("Multiple resources match " + base);
+            })
+            .get();
+  }
+
+  /**
    * Scan the {@code resources} list (generally only one entry) for a single
    * {@code resource} having the indicated path.
    *
@@ -170,12 +185,14 @@ public class Application {
      * <p>
      * The 'resources' entry then contains a collection of 'resource' entries.
      */
-    return getResources().iterator().next().getResource().stream()
-            .filter(resource -> resource.getPath().equals(path))
-            .reduce((a, b) -> {
-              throw new IllegalStateException("Multiple resources match " + path);
-            })
-            .get();
+    for (Resources rs : getResources()) {
+      for (Resource r : rs.getResource()) {
+        if (r.getPath().equalsIgnoreCase(path)) {
+          return r;
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -191,7 +208,7 @@ public class Application {
   public Method findMethod(String href) {
     String methodId = href.startsWith("#") ? href.substring(1, href.length()) : href;
     return getMethods().stream()
-            .filter(method -> method.getId().equals(methodId))
+            .filter(m -> m.getId().equals(methodId))
             .reduce((a, b) -> {
               throw new IllegalStateException("Multiple methods match " + href);
             })
