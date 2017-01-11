@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "method")
 @XmlRootElement(name = "method")
-public class Method {
+public class Method implements Comparable<Method> {
 
   /**
    * Zero or more doc elements - see section 2.3 Documentation.
@@ -111,6 +111,10 @@ public class Method {
 
   public void setRequest(Request value) {
     this.request = value;
+  }
+
+  public boolean isSetRequest() {
+    return this.request != null;
   }
 
   public List<Response> getResponse() {
@@ -199,6 +203,13 @@ public class Method {
   @Override
   public String toString() {
     return name + " " + id;
+  }
+
+  @Override
+  public int compareTo(Method o) {
+    return this.id.equals(o.getId())
+           ? this.name.compareTo(o.getName())
+           : this.id.compareTo(o.getId());
   }
 
 }
