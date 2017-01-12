@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -257,7 +257,12 @@ public class WadlBean {
      * Initialize and recursively populate the methods array.
      */
     ArrayList methods = new ArrayList();
-    methods.addAll(findMethodsRecursive(resource));
+    /**
+     * Recurse if the found resource is not null.
+     */
+    if (resource != null) {
+      methods.addAll(findMethodsRecursive(resource));
+    }
     /**
      * Sort the array in alphabetical order.
      */
@@ -359,12 +364,11 @@ public class WadlBean {
       case "GET":
       case MediaType.APPLICATION_JSON:
         return "info";
-      case "POST":
+      case "HEAD":
       case MediaType.APPLICATION_XML:
         return "success";
+      case "POST":
       case "PUT":
-        return "warning";
-      case "HEAD":
         return "warning";
       case "DELETE":
         return "danger";

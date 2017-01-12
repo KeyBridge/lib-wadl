@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   height: 100%;
-  padding: 1.3em;
+  padding: 1.3em !important;
   width: 6em;
 }
 .rest-label{
