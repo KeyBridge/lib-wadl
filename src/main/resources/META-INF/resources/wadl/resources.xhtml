@@ -19,7 +19,7 @@
   <cc:implementation>
     <li><a href="#"><i class="#{cc.attrs.icon} fa-fw"></i> #{cc.attrs.label} <span class="fa arrow"></span></a>
       <ul class="nav nav-second-level">
-        <ui:repeat value="#{wadlBean_x.findApplication(cc.attrs.wadl).baseResource.resource}" var="res">
+        <ui:repeat value="#{wadlBean.findApplication(cc.attrs.wadl).baseResource.resource}" var="res">
           <li>
             <h:link outcome="webservice.xhtml" styleClass="text-capitalize">
               <f:param name="wadl" value="#{cc.attrs.wadl}"/>
