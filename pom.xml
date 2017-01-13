@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>keybridge.lib</groupId>
   <artifactId>lib-wadl</artifactId>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
   <packaging>jar</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,6 +26,7 @@
     v0.1.0 - 2-way unmarshal and marshal operation
     v0.2.0 - add javadoc to all entity fields, add parent/child object tree navigation
     v0.3.0 - add JSF widget to render a WADL Method
+    v0.3.1 - rewrite wadlBean to support multiple WADLs on a page, add resources to help build menus
   </description>
 
   <organization>

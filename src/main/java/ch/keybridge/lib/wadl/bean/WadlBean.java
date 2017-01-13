@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
@@ -80,7 +81,6 @@ public class WadlBean {
    *                             WADL entry.
    */
   public WadlBean() throws Exception {
-    initializeWADL();
     initializeLabels();
   }
 
@@ -91,7 +91,7 @@ public class WadlBean {
    * @throws java.lang.Exception if the {@code link.properties} file does not
    *                             contain a WADL entry.
    */
-  private void initializeWADL() throws Exception {
+  private void downloadWADL(String wadl) throws Exception {
     /**
      * Download and parse the WADL file.
      */
@@ -100,14 +100,23 @@ public class WadlBean {
        * Read the WADL URI from the FacesContext. The WADL URI should be
        * configured in the link.properties file as a 'wadl=' entry.
        */
-      FacesContext context = FacesContext.getCurrentInstance();
-      String uri = context.getApplication().evaluateExpressionGet(context, "#{link.wadl}", String.class);
-      if (uri == null || uri.isEmpty()) {
-        LOGGER.severe("'wadl=' is not set in the link.properties file.");
-        throw new Exception("'wadl=' is not set in the link.properties file.");
+//      FacesContext context = FacesContext.getCurrentInstance();
+//      String uri = context.getApplication().evaluateExpressionGet(context, "#{link.wadl}", String.class);
+      /**
+       * If the URI is not declared in the link file then try to get it as a
+       * query param.
+       */
+//      System.out.println("DEBUG init wadl from link.properties " + uri);
+//      if (uri == null || uri.isEmpty()) {
+//      uri = context.getApplication().evaluateExpressionGet(context, "#{param['wadl']}", String.class);
+//      System.out.println("DEBUG read WADL URI from query parameter " + uri);
+//      }
+      if (wadl == null || wadl.isEmpty()) {
+        LOGGER.severe("Null or empty wadl URL.");
+        throw new Exception("Null or empty wadl URL.");
       }
       String wadlFile;
-      URL url = new URL(uri);
+      URL url = new URL(wadl);
       try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
         StringBuilder sb = new StringBuilder();
         String inputLine;
@@ -148,7 +157,6 @@ public class WadlBean {
      * META-INF/resources directory.
      */
     labels = new HashMap<>();
-
     try {
       URL url = getClass().getClassLoader().getResource("META-INF/resources/labels.xml");
       if (url == null) {
@@ -191,6 +199,24 @@ public class WadlBean {
   }
 
   /**
+   * Download and return the WADL application at the indicated URL. If the WADL
+   * file cannot be found (i.e. the URL is not correct) then a FACES error
+   * message is triggered.
+   *
+   * @param wadl the fully qualified URL pointing to the WADL file
+   * @return a non-null WADL application
+   */
+  public Application findApplication(String wadl) {
+    try {
+      downloadWADL(wadl);
+    } catch (Exception ex) {
+      LOGGER.log(Level.SEVERE, "FindApplication: The WADL file at {0} is not available.  {1}", new Object[]{wadl, ex.getMessage()});
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "WADL file not found.", "The WADL faile at " + wadl + " is not available."));
+    }
+    return application != null ? application : new Application();
+  }
+
+  /**
    * Get the WADL labels.
    *
    * @return a non-null HashMap
@@ -221,11 +247,16 @@ public class WadlBean {
    * This is commonly used to find a (top level) Resources object to build a
    * menu of (second level) Resource entries under a common base path.
    *
-   * @param base the URI base
+   * @param wadl the URI base
    * @return the matched Resources instance
    */
-  public Resources findResources(String base) {
-    return application.findResources(base);
+  public Resources findResources(String wadl) {
+    /**
+     * If the application is not set the return an empty resource.
+     */
+    return application != null
+           ? application.findResources(wadl)
+           : new Resources();
   }
 
   /**
@@ -247,19 +278,51 @@ public class WadlBean {
    * <p>
    * This is commonly used to find a list of (lowest level) Method entries when
    * displaying a page detail.
+   * <p>
+   * If the is not configured then the WADL is downloaded and initialized.
+   *
+   * @param wadl the WADL url
+   * @param path the Resource path
+   * @return a non-null ArrayList.
+   */
+  public List<Method> findMethods(String wadl, String path) {
+    if (application == null) {
+      try {
+        downloadWADL(wadl);
+      } catch (Exception ex) {
+        LOGGER.log(Level.SEVERE, "findMethods: The WADL file at {0} is not available.  {1}", new Object[]{wadl, ex.getMessage()});
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "WADL file not found.", "The WADL faile at " + wadl + " is not available."));
+        return new ArrayList<>();
+      }
+    }
+    return findMethods(path);
+
+  }
+
+  /**
+   * Find all methods identified in the {@code Application} instance belonging
+   * to the indicated Resource, which is identified by its Path.
+   * <p>
+   * This is commonly used to find a list of (lowest level) Method entries when
+   * displaying a page detail.
    *
    * @param path the Resource path
    * @return a non-null ArrayList.
    */
   public List<Method> findMethods(String path) {
-    Resource resource = application.findResource(path);
     /**
-     * Initialize and recursively populate the methods array.
+     * Failsafe in case the application did not load.
+     */
+    if (application == null) {
+      return new ArrayList<>();
+    }
+
+    /**
+     * Initialize and recursively populate the methods array. Recurse if the
+     * found resource is not null.
      */
     ArrayList methods = new ArrayList();
-    /**
-     * Recurse if the found resource is not null.
-     */
+    Resource resource = application.findResource(path);
     if (resource != null) {
       methods.addAll(findMethodsRecursive(resource));
     }
