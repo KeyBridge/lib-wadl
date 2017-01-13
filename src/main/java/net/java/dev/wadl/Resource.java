@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -239,7 +239,9 @@ public class Resource implements PathProvider {
    */
   @Override
   public String buildPath() {
-    return parent != null ? parent.buildPath() + "/" + path : path;
+    return parent != null
+           ? parent.buildPath() + (path.isEmpty() ? "" : "/" + path) // avoid double slash
+           : path;
   }
 
   /**
