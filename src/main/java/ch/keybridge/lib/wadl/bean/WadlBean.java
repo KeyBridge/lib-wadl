@@ -59,6 +59,10 @@ import net.java.dev.wadl.*;
 public class WadlBean {
 
   private static final Logger LOGGER = Logger.getLogger(WadlBean.class.getName());
+  /**
+   * The current WADL URL.
+   */
+  private String wadl;
 
   /**
    * The unmarshaled WADL application.
@@ -92,6 +96,10 @@ public class WadlBean {
    *                             contain a WADL entry.
    */
   private void downloadWADL(String wadl) throws Exception {
+    /**
+     * Set the WADL.
+     */
+    this.wadl = wadl;
     /**
      * Download and parse the WADL file.
      */
@@ -247,15 +255,15 @@ public class WadlBean {
    * This is commonly used to find a (top level) Resources object to build a
    * menu of (second level) Resource entries under a common base path.
    *
-   * @param wadl the URI base
+   * @param base the URI base
    * @return the matched Resources instance
    */
-  public Resources findResources(String wadl) {
+  public Resources findResources(String base) {
     /**
      * If the application is not set the return an empty resource.
      */
     return application != null
-           ? application.findResources(wadl)
+           ? application.findResources(base)
            : new Resources();
   }
 
@@ -286,7 +294,7 @@ public class WadlBean {
    * @return a non-null ArrayList.
    */
   public List<Method> findMethods(String wadl, String path) {
-    if (application == null) {
+    if (application == null || !wadl.equals(this.wadl)) {
       try {
         downloadWADL(wadl);
       } catch (Exception ex) {
