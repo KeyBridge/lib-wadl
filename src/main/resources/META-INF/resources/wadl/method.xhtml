@@ -8,10 +8,12 @@
   <!-- INTERFACE -->
   <cc:interface>
     <cc:attribute name="method" required="true" type="net.java.dev.wadl.Method" displayName="The method ID"/>
-    <cc:attribute name="description" required="false" default="" type="java.lang.String" displayName="The resource description. If present this is displayed below the label. May be extensive. Is converted to HTML."/>
+    <cc:attribute name="description" required="false" default="" type="java.lang.String" displayName="The resource description. If present this is displayed below the label. May be extensive. Is printed without encoding (as HTML)."/>
     <cc:attribute name="title" required="false" default="Rest Resource" type="java.lang.String" displayName="The resource label"/>
     <cc:attribute name="icon" required="false" default="glyphicon glyphicon-cloud" type="java.lang.String" displayName="A FA icon to display in the header."/>
     <cc:attribute name="collapsible" required="false" default="false" type="java.lang.Boolean" displayName="Whether the panel body is collapsible."/>
+
+    <cc:attribute name="labelProvider" required="true" shortDescription="A backing bean supporting the method getLabel('key')."/>
 
     <cc:attribute name="verbose" required="false" default="false" type="java.lang.Boolean" displayName="Whether to log warnings when a label is not found."/>
   </cc:interface>
@@ -44,14 +46,16 @@
                 </a>
               </h:panelGroup>
             </div>
-            <h3 class="panel-title text-right"> #{cc.attrs.title} <span class="#{cc.attrs.icon}" style="margin-left: 1em;"/>  </h3>
+            <div class="panel-title text-right">
+              #{cc.attrs.title} <span class="#{cc.attrs.icon}" style="margin-left: 1em;"/>
+            </div>
           </div>
           <div id="#{cc.attrs.method.id}" class="#{cc.attrs.collapsible ? 'collapse' : 'collapse.in'}">
             <div class="panel-body">
-              <h4> Description </h4>
-              <p> <h:outputText value="#{wadlBean.formatDescription(cc.attrs.description)}" escape="false"/> </p>
+              <p class="text-bold"> Description </p>
+              <p> <h:outputText value="#{cc.attrs.description}" escape="false"/> </p>
 
-              <h4> URI Pattern </h4>
+              <p class="text-bold"> URI Pattern </p>
               <p>
                 <code><h:outputText value="#{wadlBean.buildFormattedURI(cc.attrs.method.path)}" escape="false"/></code>
               </p>
@@ -68,7 +72,7 @@
                     <ui:repeat value="#{wadlBean.findMethodParameters(cc.attrs.method)}" var="p">
                       <tr>
                         <th> <h:outputText value="#{p.name}" styleClass="text-primary"/>  </th>
-                        <td> #{cc.attrs.verbose ? wadlBean.findLabel(p.name) : wadlBean.labels.get(p.name)} </td>
+                        <td> #{cc.attrs.labelProvider.findLabel(p.name)} </td>
                         <td>#{p.type.localPart}</td>
                         <td>#{p.style}</td>
                       </tr>
@@ -79,7 +83,7 @@
 
               <h:panelGroup rendered="#{wadlBean.isPutOrPost(cc.attrs.method)}">
                 <!--Request objects are only valid for PUT or POST operations-->
-                <h4> Request </h4>
+                <p class="text-bold"> Request </p>
                 <div class="table-responsive">
                   <table class="table table-condensed">
                     <tr>
@@ -90,7 +94,7 @@
                     <ui:repeat value="#{wadlBean.findMethodRequestElements(cc.attrs.method).entrySet().toArray()}" var="mvmap">
                       <tr>
                         <td> <code> #{mvmap.key} </code> </td>
-                        <td> #{cc.attrs.verbose ? wadlBean.findLabel(mvmap.key) : wadlBean.labels.get(mvmap.key)} </td>
+                        <td> #{cc.attrs.labelProvider.findLabel(mvmap.key)} </td>
                         <td>
                           <ui:repeat value="#{mvmap.value}" var="rep">
                             <span class="label label-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
@@ -103,7 +107,7 @@
 
               </h:panelGroup>
 
-              <h4>Response</h4>
+              <p class="text-bold">Response</p>
               <div class="table-responsive">
                 <table class="table table-condensed">
                   <tr>
@@ -115,7 +119,7 @@
                     <ui:repeat value="#{wadlBean.findMethodResponseElements(r).entrySet().toArray()}" var="mvmap">
                       <tr>
                         <td> #{r.status.size() == 0? '200' : r.status} </td>
-                        <td> <code>#{mvmap.key}</code>  #{cc.attrs.verbose ? wadlBean.findLabel(mvmap.key) : wadlBean.labels.get(mvmap.key)} </td>
+                        <td> <code>#{mvmap.key}</code>  #{cc.attrs.labelProvider.findLabel(mvmap.key)} </td>
                         <td>
                           <ui:repeat value="#{mvmap.value}" var="rep">
                             <span class="label label-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
