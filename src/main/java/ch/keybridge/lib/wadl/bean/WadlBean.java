@@ -372,10 +372,16 @@ public class WadlBean {
    */
   public MultivaluedMap<String, Representation> findMethodRequestElements(Method method) {
     MultivaluedMap<String, Representation> elementMediaTypes = new MultivaluedHashMap<>();
-    if (HTTPMethods.PUT.equals(method.getName()) || HTTPMethods.POST.equals(method.getName())) {
-      method.getRequest().getRepresentation().stream().forEach((representation) -> {
-        elementMediaTypes.add(representation.getElement().getLocalPart(), representation);
-      });
+    try {
+      if (HTTPMethods.PUT.equals(method.getName()) || HTTPMethods.POST.equals(method.getName())) {
+        method.getRequest().getRepresentation().stream().forEach((Representation representation) -> {
+          if (representation.getElement() != null) {
+            elementMediaTypes.add(representation.getElement().getLocalPart(), representation);
+          }
+        });
+      }
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "findMethodRequestElements ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
     }
     return elementMediaTypes;
   }
@@ -390,12 +396,16 @@ public class WadlBean {
    */
   public MultivaluedMap<String, Representation> findMethodResponseElements(Response response) {
     MultivaluedMap<String, Representation> elementMediaTypes = new MultivaluedHashMap<>();
-    response.getRepresentation().stream().forEach((representation) -> {
-      elementMediaTypes.add(representation.getElement() != null
-                            ? representation.getElement().getLocalPart()
-                            : "Response",
-                            representation);
-    });
+    try {
+      response.getRepresentation().stream().forEach((representation) -> {
+        elementMediaTypes.add(representation.getElement() != null
+                              ? representation.getElement().getLocalPart()
+                              : "Response",
+                              representation);
+      });
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "findMethodResponseElements ERROR.  {0}", e.getMessage());
+    }
     return elementMediaTypes;
   }
 
@@ -408,8 +418,12 @@ public class WadlBean {
    */
   public List<Param> findMethodParameters(Method method) {
     List<Param> parameterList = new ArrayList<>(method.getParent().getParam());
-    if (method.isSetRequest()) {
-      parameterList.addAll(method.getRequest().getParam());
+    try {
+      if (method.isSetRequest()) {
+        parameterList.addAll(method.getRequest().getParam());
+      }
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "findMethodParameters ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
     }
     return parameterList;
   }
