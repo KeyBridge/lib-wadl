@@ -225,6 +225,20 @@ public class WadlBean {
   }
 
   /**
+   * Get the base resources for the indicated WADL
+   *
+   * @param wadl the fully qualified URL pointing to the WADL file
+   * @return the WADL base resources
+   */
+  public List<Resource> findWadlResources(String wadl) {
+    findApplication(wadl);
+
+    return application != null
+           ? application.getBaseResource().getResource()
+           : new ArrayList<>();
+  }
+
+  /**
    * Get the WADL labels.
    *
    * @return a non-null HashMap
