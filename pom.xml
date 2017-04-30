@@ -50,7 +50,7 @@
     <dependency>
       <groupId>keybridge.lib</groupId>
       <artifactId>xml-adapter</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1</version>
       <type>jar</type>
     </dependency>
     <dependency>
@@ -76,5 +76,5 @@
       <url>${repository.url}</url>
     </repository>
   </distributionManagement>
-  
+
 </project>
