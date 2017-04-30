@@ -153,7 +153,9 @@ public class Application {
    * @return the FIRST {@code Resources} entry
    */
   public Resources getBaseResource() {
-    return getResources().iterator().next();
+    return getResources().isEmpty()
+           ? new Resources()
+           : getResources().iterator().next();
   }
 
   /**
