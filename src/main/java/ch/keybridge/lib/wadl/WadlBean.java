@@ -14,9 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.keybridge.lib.wadl.bean;
+package ch.keybridge.lib.wadl;
 
-import ch.keybridge.lib.wadl.LabelProvider;
 import ch.keybridge.lib.xml.JaxbUtility;
 import java.io.BufferedReader;
 import java.io.IOException;
