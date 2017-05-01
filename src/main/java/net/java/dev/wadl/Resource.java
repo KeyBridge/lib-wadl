@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resource")
 @XmlRootElement(name = "resource")
-public class Resource implements PathProvider {
+public class Resource implements PathProvider, Comparable<Resource> {
 
   /**
    * Zero or more doc elements - see section 2.3 .
@@ -257,6 +257,21 @@ public class Resource implements PathProvider {
     }
   }
 
+  /**
+   * Comparison is based on path.
+   *
+   * @param o the other resource
+   * @return the sort order
+   */
+  @Override
+  public int compareTo(Resource o) {
+    try {
+      return this.path.compareTo(o.getPath());
+    } catch (Exception e) {
+      return -1;
+    }
+  }
+
   @Override
   public int hashCode() {
     int hash = 3;
@@ -276,10 +291,7 @@ public class Resource implements PathProvider {
       return false;
     }
     final Resource other = (Resource) obj;
-    if (!Objects.equals(this.path, other.path)) {
-      return false;
-    }
-    return true;
+    return Objects.equals(this.path, other.path);
   }
 
   @Override
