@@ -79,14 +79,10 @@ sorely lacking in useful documentation and labels. To fill this requirement crea
 an instance of the **LabelProvider** interface and identify this in your wadl component.
 
 <pre>
-  &lt;link rel="stylesheet" href="wadl.css"/&gt;
-
-  &lt;ui:repeat value="#{wadlBean.findMethods(param['path'])}" var="m"&gt;
     &lt;wadl:method method="#{m}"
               verbose="true"
               labelProvider="#{myLabelProviderBean}"
-              collapsible="true"/&gt;
-  &lt;/ui:repeat&gt;</pre>
+              collapsible="true"/&gt;</pre>
 
 ## License = GPL 3.0
 
