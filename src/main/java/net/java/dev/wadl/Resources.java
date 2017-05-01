@@ -18,6 +18,7 @@ package net.java.dev.wadl;
 
 import ch.keybridge.lib.wadl.PathProvider;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import javax.xml.bind.annotation.*;
@@ -70,6 +71,7 @@ public class Resources implements PathProvider {
     if (resource == null) {
       resource = new ArrayList<>();
     }
+    Collections.sort(resource); // alpha sort
     return this.resource;
   }
 
