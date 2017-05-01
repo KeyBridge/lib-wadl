@@ -84,7 +84,7 @@ an instance of the **LabelProvider** interface and identify this in your wadl co
   &lt;ui:repeat value="#{wadlBean.findMethods(param['path'])}" var="m"&gt;
     &lt;wadl:method method="#{m}"
               verbose="true"
-              labelProvider="myLabelProviderBean"
+              labelProvider="#{myLabelProviderBean}"
               collapsible="true"/&gt;
   &lt;/ui:repeat&gt;</pre>
 
