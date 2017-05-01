@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:wadl="http://keybridge.ch/wadl">
+  <ui:composition template="/template.xhtml">
+
+    <ui:define name="stylesheet">
+
+      <h:outputScript library="css" name="wadl.css"/>
+
+      <style type="text/css">
+        .rest-button { position: absolute; top: 0; left: 0; height: 100%; padding: .75em !important; width: 6em; color: #fff !important; }
+        .rest-label{ margin-left: 6em; }
+      </style>
+    </ui:define>
+
+    <ui:define name="content">
+      <h:form>
+        <!--first load the WADL and then update the page content-->
+        <p:remoteCommand autoRun="true" update="wadlcontent" actionListener="#{wadlBean_x.onSetWadl('http://keybridgewireless.com/gis/rest/application.wadl')}"/>
+      </h:form>
+
+      <h:panelGroup id="wadlcontent">
+        <h:panelGroup rendered="#{wadlBean_x.wadl ne null}">
+          <!--HAVE WADL-->
+          <div class="card card-inverse card-primary mb-3">
+            <div class="card-block d-flex justify-content-between">
+              <i class="fa fa-info-circle fa-5x"></i>
+
+              <div class="text-right">
+                <h1 class="card-title"> Getting Started Guide </h1>
+                <div> Key Bridge web services and online API guide.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-4">
+              <!--Vertical navigation-->
+              <nav class="nav flex-column" role="tablist">
+                <a class="nav-link" href="#mainTab" data-toggle="tab" role="tab"> Home </a>
+                <ui:repeat value="#{wadlBean_x.baseResources}" var="res">
+                  <a class="nav-link" href="##{res.path}" data-toggle="tab" role="tab"> <h:outputText value="#{res.path}" styleClass="text-capitalize"/> </a>
+                </ui:repeat>
+              </nav>
+
+            </div>
+
+            <div class="col-8">
+              <!--TAB content-->
+              <div class="tab-content">
+                <div class="tab-pane active" id="mainTab" role="tabpanel">
+
+                  INCLUDE
+                  main tab content
+
+                </div>
+
+                <ui:repeat value="#{wadlBean_x.baseResources}" var="res">
+                  <div class="tab-pane" id="#{res.path}" role="tabpanel">
+                    <h1 class="text-capitalize"> #{res.path} </h1>
+                    <p>
+                      #{res.path} text if present
+                    </p>
+
+                    <!--each method-->
+
+                    <div id="accordion" role="tablist" aria-multiselectable="true">
+
+                      <ui:repeat value="#{wadlBean_x.findMethods(res)}" var="m">
+
+                        <wadl:method_x method="#{m}" labelProvider="#{wadlBean_x}"
+                                       collapsible="true"/>
+
+                      </ui:repeat>
+
+                    </div><!--accordion-->
+
+
+
+
+
+                  </div>
+                </ui:repeat>
+              </div>
+
+
+            </div>
+
+
+
+
+          </div>
+        </h:panelGroup>
+      </h:panelGroup>
+
+    </ui:define>
+
+
+
+
+
+
+  </ui:composition>
+</html>
+
