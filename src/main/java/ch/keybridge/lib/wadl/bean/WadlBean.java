@@ -16,18 +16,19 @@
  */
 package ch.keybridge.lib.wadl.bean;
 
+import ch.keybridge.lib.wadl.LabelProvider;
 import ch.keybridge.lib.xml.JaxbUtility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -38,27 +39,21 @@ import net.java.dev.wadl.*;
 /**
  * JSF backing bean supporting WADL rendering and auto-documentation.
  * <p>
- * Configuration: This RequestScoped Named bean requires an entry in the Faces
- * resource bundle {@code link.properties} to define the fully qualified WADL
- * location. In the faces-config.xml file you should have:
- * <pre>
- * &lt;resource-bundle&gt;
- *   &lt;base-name&gt;faces.link&lt;/base-name&gt;
- *   &lt;var&gt;link&lt;/var&gt;
- * &lt;/resource-bundle&gt;
- * </pre> and in the link.properties file you should have:
- * <pre>
- * wadl=[uri]/application.wadl
- * </pre>
+ * To use: first initialize this bean on the base by EITHER uncommenting the
+ * postConstruct method and calling the page with a {@code wadl} query parameter
+ * OR initializing this bean by calling the {@code onSetWadl(String wadl)}
+ * method on page load.
+ *
  *
  * @author Key Bridge LLC
- * @since 01/10/17 created as an alternative to Swagger.io
+ * @since v0.3.0 created 01/10/17 as an alternative to Swagger.io
  */
 @Named(value = "wadlBean")
 @RequestScoped
-public class WadlBean {
+public class WadlBean implements LabelProvider {
 
   private static final Logger LOGGER = Logger.getLogger(WadlBean.class.getName());
+
   /**
    * The current WADL URL.
    */
@@ -70,22 +65,50 @@ public class WadlBean {
   private Application application;
 
   /**
-   * A map of WADL properties and their corresponding description.
-   * <p>
-   * Developer note: LABELS will be eventually be replaced when the WADL
-   * generator is enriched to self-document using {@code Doc} instances.
-   * <p>
+   * Creates a new instance of WadlBean
    */
-  private Map<String, String> labels;
+  public WadlBean() {
+  }
 
   /**
-   * Creates a new instance of WadlBean
-   *
-   * @throws java.lang.Exception if the link.properties file does not contain a
-   *                             WADL entry.
+   * Load read the WADL and marshal the application.
    */
-  public WadlBean() throws Exception {
-    initializeLabels();
+//  @PostConstruct
+//  protected void postConstruct() {
+//    this.wadl = FacesUtil.getRequestParameter("wadl");
+//    if (wadl != null) {
+//      try {
+//        downloadWADL(wadl);
+//      } catch (Exception exception) {
+//        LOGGER.severe(exception.getMessage());
+//      }
+//    }
+//  }
+  /**
+   * Get the WADL url.
+   *
+   * @return the url
+   */
+  public String getWadl() {
+    return wadl;
+  }
+
+  public void setWadl(String wadl) {
+    this.wadl = wadl;
+  }
+
+  /**
+   * AJAX method typically called on page load to initialize this WADL bean and
+   * update the page content.
+   *
+   * @param wadlUrl the fully qualified WADL URL
+   */
+  public void onSetWadl(String wadlUrl) {
+    try {
+      downloadWADL(wadlUrl);
+    } catch (Exception exception) {
+      LOGGER.severe(exception.getMessage());
+    }
   }
 
   /**
@@ -142,49 +165,9 @@ public class WadlBean {
        */
       this.application.postLoad();
     } catch (MalformedURLException ex) {
-      Logger.getLogger(WadlBean.class.getName()).log(Level.SEVERE, null, ex);
+      LOGGER.log(Level.SEVERE, null, ex);
     } catch (IOException | JAXBException ex) {
-      Logger.getLogger(WadlBean.class.getName()).log(Level.SEVERE, null, ex);
-    }
-  }
-
-  /**
-   * Internal method called when this class is constructed. This reads and
-   * parses the {@code labels.xml} properties from the META-INF/resources
-   * directory.
-   * <p>
-   * If the {@code labels.xml} properties file is not found then a warning is
-   * issued and an empty HashMap is set.
-   * <p>
-   * Developer note: LABELS will be eventually be replaced when the WADL
-   * generator is enriched to self-document using {@code Doc} instances.
-   */
-  private void initializeLabels() {
-    /**
-     * Read the labelProperties.xml file, which should be located in the
-     * META-INF/resources directory.
-     */
-    labels = new HashMap<>();
-    try {
-      URL url = getClass().getClassLoader().getResource("META-INF/resources/labels.xml");
-      if (url == null) {
-        LOGGER.warning("labels.xml file not found in the META-INF/resources directory.");
-        return;
-      }
-      /**
-       * Read the properties file.
-       */
-      Properties properties = new Properties();
-      properties.loadFromXML(url.openStream());
-      /**
-       * Push the properties into a HashMap, which is easier to access from JSF.
-       */
-      properties.stringPropertyNames().stream().forEach(name -> {
-        labels.put(name, properties.getProperty(name));
-      });
-    } catch (Exception exception) {
-      LOGGER.severe("ERROR reading labels.xml file in the META-INF/resources directory.");
-      LOGGER.log(Level.SEVERE, null, exception);
+      LOGGER.log(Level.SEVERE, null, ex);
     }
   }
 
@@ -207,60 +190,14 @@ public class WadlBean {
   }
 
   /**
-   * Download and return the WADL application at the indicated URL. If the WADL
-   * file cannot be found (i.e. the URL is not correct) then a FACES error
-   * message is triggered.
-   *
-   * @param wadl the fully qualified URL pointing to the WADL file
-   * @return a non-null WADL application
-   */
-  public Application findApplication(String wadl) {
-    try {
-      downloadWADL(wadl);
-    } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, "FindApplication: The WADL file at {0} is not available.  {1}", new Object[]{wadl, ex.getMessage()});
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "WADL file not found.", "The WADL faile at " + wadl + " is not available."));
-    }
-    return application != null ? application : new Application();
-  }
-
-  /**
    * Get the base resources for the indicated WADL
    *
-   * @param wadl the fully qualified URL pointing to the WADL file
    * @return the WADL base resources
    */
-  public List<Resource> findWadlResources(String wadl) {
-    findApplication(wadl);
-
+  public List<Resource> getBaseResources() {
     return application != null
            ? application.getBaseResource().getResource()
            : new ArrayList<>();
-  }
-
-  /**
-   * Get the WADL labels.
-   *
-   * @return a non-null HashMap
-   */
-  public Map<String, String> getLabels() {
-    return labels;
-  }
-
-  /**
-   * Helper method to log a warning if a requested name is not found. This helps
-   * when developing a WADL labels file.
-   *
-   * @param name the requested name
-   * @return the corresponding label
-   */
-  public String findLabel(String name) {
-    if (labels.containsKey(name)) {
-      return labels.get(name);
-    } else {
-      LOGGER.log(Level.WARNING, "No label for WADL parameter {0}", name);
-      return "";
-    }
   }
 
   /**
@@ -300,38 +237,11 @@ public class WadlBean {
    * <p>
    * This is commonly used to find a list of (lowest level) Method entries when
    * displaying a page detail.
-   * <p>
-   * If the is not configured then the WADL is downloaded and initialized.
    *
-   * @param wadl the WADL url
-   * @param path the Resource path
+   * @param resource the Resource
    * @return a non-null ArrayList.
    */
-  public List<Method> findMethods(String wadl, String path) {
-    if (application == null || !wadl.equals(this.wadl)) {
-      try {
-        downloadWADL(wadl);
-      } catch (Exception ex) {
-        LOGGER.log(Level.SEVERE, "findMethods: The WADL file at {0} is not available.  {1}", new Object[]{wadl, ex.getMessage()});
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "WADL file not found.", "The WADL faile at " + wadl + " is not available."));
-        return new ArrayList<>();
-      }
-    }
-    return findMethods(path);
-
-  }
-
-  /**
-   * Find all methods identified in the {@code Application} instance belonging
-   * to the indicated Resource, which is identified by its Path.
-   * <p>
-   * This is commonly used to find a list of (lowest level) Method entries when
-   * displaying a page detail.
-   *
-   * @param path the Resource path
-   * @return a non-null ArrayList.
-   */
-  public List<Method> findMethods(String path) {
+  public List<Method> findMethods(Resource resource) {
     /**
      * Failsafe in case the application did not load.
      */
@@ -344,7 +254,6 @@ public class WadlBean {
      * found resource is not null.
      */
     ArrayList methods = new ArrayList();
-    Resource resource = application.findResource(path);
     if (resource != null) {
       methods.addAll(findMethodsRecursive(resource));
     }
@@ -498,6 +407,29 @@ public class WadlBean {
    */
   public String formatDescription(String description) {
     return description.replaceAll("\\s{10,}", "</p>\n<p>");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getLabel(String key) {
+//     Helper method to log a warning if a requested name is not found. This helps
+//    when developing a WADL labels file.
+
+    System.out.println("DEBUG getLabel " + key);
+//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return key;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDescription(String key) {
+    System.out.println("DEBUG getLabel " + key);
+// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return "<p>" + key + "</p>";
   }
 
 }
