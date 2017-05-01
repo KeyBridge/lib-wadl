@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,12 @@ import net.java.dev.wadl.Param;
  * <p>
  * This applies to the {@code Resources} class that provides a base path, plus
  * the {@code Resource} path that provides a path fragment.
+ * <p>
+ * This interface helps to facilitate building a REST path by recursively
+ * examining a method's parents.
  *
  * @author Key Bridge LLC
+ * @since v0.3.0 added 01/10/17
  */
 public interface PathProvider {
 
