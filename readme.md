@@ -66,6 +66,8 @@ This resource is designed for web applications using Java Server Faces.
   &lt;/ui:repeat&gt;</pre>
 
 A copy of the required **wadl.css** is provided in the **doc/example** directory.
+An example page showing how to use this component is also provided in the **doc/example**
+directory.
 
 More: Familiarize yourself with the WADL specification then inspect the **WadlBean**
 managed bean for more information examples.
@@ -73,11 +75,18 @@ managed bean for more information examples.
 ## Enhancements (the "Daub")
 
 Java Jackson WADL files presently do not include the **Doc** element, and so are
-sorely lacking in useful documentation and labels. Specify your own parameter
-descriptions by adding a **labels.xml** properties file in the **META_INF/resources**
-directory of your application.
+sorely lacking in useful documentation and labels. To fill this requirement create
+an instance of the **LabelProvider** interface and identify this in your wadl component.
 
-An example **labels.xml** file is included in the **doc/example** directory.
+<pre>
+  &lt;link rel="stylesheet" href="wadl.css"/&gt;
+
+  &lt;ui:repeat value="#{wadlBean.findMethods(param['path'])}" var="m"&gt;
+    &lt;wadl:method method="#{m}"
+              verbose="true"
+              labelProvider="myLabelProviderBean"
+              collapsible="true"/&gt;
+  &lt;/ui:repeat&gt;</pre>
 
 ## License = GPL 3.0
 
