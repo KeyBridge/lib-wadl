@@ -22,6 +22,17 @@ package ch.keybridge.lib.wadl;
 public interface LabelProvider {
 
   /**
+   * Parse a method ID into a pretty label. Generally this should parse a
+   * CamelCase label.
+   * <p>
+   * Implementations MUST return a non-null value.
+   *
+   * @param methodId the method id (i.e. the method name)
+   * @return the corresponding label
+   */
+  String parseMethodId(String methodId);
+
+  /**
    * Get a label corresponding to the provided key index. This is typically a
    * short or simple label.
    * <p>
