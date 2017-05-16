@@ -13,7 +13,7 @@
     <cc:attribute name="icon" required="false" default="glyphicon glyphicon-cloud" type="java.lang.String" displayName="A FA icon to display in the header."/>
     <cc:attribute name="collapsible" required="false" default="true" type="java.lang.Boolean" displayName="Whether the panel body is collapsible."/>
 
-    <cc:attribute name="labelProvider" required="true" shortDescription="A backing bean supporting the method getLabel('key')."/>
+    <cc:attribute name="labelProvider" required="true" shortDescription="A backing bean supporting WADL text processing."/>
 
     <cc:attribute name="verbose" required="false" default="false" type="java.lang.Boolean" displayName="Whether to log warnings when a label is not found."/>
   </cc:interface>
@@ -32,7 +32,7 @@
           <div class="card-header" role="tab" id="#{cc.attrs.method.id}" style="position: relative; border-bottom: none;">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapse#{cc.attrs.method.id}" aria-expanded="true" aria-controls="collapse#{cc.attrs.method.id}">
               <div class="rest-button card-#{wadlBean.buildCSSType(cc.attrs.method.name)}">  <h:outputText value="#{cc.attrs.method.name}"/> </div>
-              <h:outputText value="#{cc.attrs.method.id}" styleClass="rest-label text-capitalize"/>
+              <h:outputText value="#{cc.attrs.labelProvider.parseMethodId(cc.attrs.method.id)}" styleClass="rest-label text-capitalize"/>
             </a>
           </div>
 
