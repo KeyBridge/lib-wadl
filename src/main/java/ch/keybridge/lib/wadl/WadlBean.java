@@ -27,7 +27,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -72,17 +75,11 @@ public class WadlBean implements LabelProvider {
   /**
    * Load read the WADL and marshal the application.
    */
-//  @PostConstruct
-//  protected void postConstruct() {
-//    this.wadl = FacesUtil.getRequestParameter("wadl");
-//    if (wadl != null) {
-//      try {
-//        downloadWADL(wadl);
-//      } catch (Exception exception) {
-//        LOGGER.severe(exception.getMessage());
-//      }
-//    }
-//  }
+  @PostConstruct
+  protected void postConstruct() {
+    autoload();
+  }
+
   /**
    * Get the WADL url.
    *
@@ -99,14 +96,54 @@ public class WadlBean implements LabelProvider {
   /**
    * AJAX method typically called on page load to initialize this WADL bean and
    * update the page content.
+   * <p>
+   * This method allows the user to specify the WADL location with a fully
+   * qualified URL. e.g.
+   * {@code http://localhost/application/rest/application.wadl}
    *
    * @param wadlUrl the fully qualified WADL URL
    */
-  public void onSetWadl(String wadlUrl) {
+  public void load(String wadlUrl) {
     try {
       downloadWADL(wadlUrl);
     } catch (Exception exception) {
       LOGGER.severe(exception.getMessage());
+    }
+  }
+
+  /**
+   * AJAX method typically called on page load to try to automatically
+   * initialize this WADL bean.
+   * <p>
+   * This method searches the current application context root for a resource
+   * named {@code application.wadl}. The search will look for one of two
+   * application paths: {@code [context-root]/rest/} and
+   * {@code [context-root][resources]}.
+   * <p>
+   */
+  public void autoload() {
+    /**
+     * Get the current context path (i.e. the application context root). This is
+     * copied from FacesUtil.getContextPath().
+     */
+    ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+    String contextPath = new StringBuilder()
+            .append(context.getRequestScheme())
+            .append("://")
+            .append(context.getRequestServerName())
+            .append((context.getRequestServerPort() != 80 && context.getRequestServerPort() != 443)
+                    ? ":" + context.getRequestServerPort()
+                    : "")
+            .append(context.getRequestContextPath())
+            .toString();
+    /**
+     * Try to load the WADL from either "/rest" (the Key Bridge default) or
+     * /resources (the NetBeans default).
+     */
+    load(contextPath + "/rest/application.wadl");
+    if (application == null) {
+      LOGGER.fine("WADL not found under 'rest' path. Trying 'resources'");
+      load(contextPath + "/resources/application.wadl");
     }
   }
 
@@ -118,10 +155,6 @@ public class WadlBean implements LabelProvider {
    *                             contain a WADL entry.
    */
   private void downloadWADL(String wadl) throws Exception {
-    /**
-     * Set the WADL.
-     */
-    this.wadl = wadl;
     /**
      * Download and parse the WADL file.
      */
@@ -163,6 +196,10 @@ public class WadlBean implements LabelProvider {
        * Call PostLoad to set the inter-object parent/child relationships.
        */
       this.application.postLoad();
+      /**
+       * Set the WADL IFF the application was successfully loaded and parsed.
+       */
+      this.wadl = wadl;
     } catch (MalformedURLException ex) {
       LOGGER.log(Level.SEVERE, null, ex);
     } catch (IOException | JAXBException ex) {
@@ -429,6 +466,14 @@ public class WadlBean implements LabelProvider {
     System.out.println("DEBUG getLabel " + key);
 // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     return "<p>" + key + "</p>";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String parseMethodId(String methodId) {
+    return methodId;
   }
 
 }
