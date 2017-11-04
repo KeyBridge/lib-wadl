@@ -44,12 +44,24 @@ public interface LabelProvider {
   String getLabel(String key);
 
   /**
-   * Get an extended description. This is typically a paragraph description of a
-   * API method.
+   * Get a label corresponding to the provided method and parameter. This is
+   * typically a short or simple label.
+   * <p>
+   * Implementations MUST return a non-null value.
+   *
+   * @param method    the method name
+   * @param parameter the method parameter
+   * @return the corresponding label
+   */
+  String getLabel(String method, String parameter);
+
+  /**
+   * Get an extended method description. This is typically a paragraph
+   * description of a API method.
    *
    * @param key the key index
    * @return the corresponding text description
    */
-  String getDescription(String key);
+  String getMethodDescription(String key);
 
 }
