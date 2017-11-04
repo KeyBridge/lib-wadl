@@ -27,11 +27,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -50,11 +47,9 @@ import net.java.dev.wadl.*;
  * @author Key Bridge LLC
  * @since v0.3.0 created 01/10/17 as an alternative to Swagger.io
  */
-@Named(value = "wadlBean")
-@RequestScoped
-public class WadlBean implements LabelProvider {
+public abstract class AbstractWadlBean implements LabelProvider {
 
-  private static final Logger LOGGER = Logger.getLogger(WadlBean.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(AbstractWadlBean.class.getName());
 
   /**
    * The current WADL URL.
@@ -69,17 +64,13 @@ public class WadlBean implements LabelProvider {
   /**
    * Creates a new instance of WadlBean
    */
-  public WadlBean() {
+  public AbstractWadlBean() {
   }
 
   /**
    * Load read the WADL and marshal the application.
    */
-  @PostConstruct
-  protected void postConstruct() {
-    autoload();
-  }
-
+//  @PostConstruct  protected void postConstruct() {    autoload();  }
   /**
    * Get the WADL url.
    *
@@ -128,21 +119,25 @@ public class WadlBean implements LabelProvider {
      */
     ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
     String contextPath = new StringBuilder()
-            .append(context.getRequestScheme())
-            .append("://")
-            .append(context.getRequestServerName())
-            .append((context.getRequestServerPort() != 80 && context.getRequestServerPort() != 443)
-                    ? ":" + context.getRequestServerPort()
-                    : "")
-            .append(context.getRequestContextPath())
-            .toString();
+      .append(context.getRequestScheme())
+      .append("://")
+      .append(context.getRequestServerName())
+      .append((context.getRequestServerPort() != 80 && context.getRequestServerPort() != 443)
+              ? ":" + context.getRequestServerPort()
+              : "")
+      .append(context.getRequestContextPath())
+      .toString();
     /**
      * Try to load the WADL from either "/rest" (the Key Bridge default) or
      * /resources (the NetBeans default).
      */
     load(contextPath + "/rest/application.wadl");
     if (application == null) {
-      LOGGER.fine("WADL not found under 'rest' path. Trying 'resources'");
+      LOGGER.fine("WADL not found under 'rest' path. Trying 'api'");
+      load(contextPath + "/api/application.wadl");
+    }
+    if (application == null) {
+      LOGGER.fine("WADL not found under 'rest' or api' path. Trying 'resources'");
       load(contextPath + "/resources/application.wadl");
     }
   }
@@ -417,7 +412,7 @@ public class WadlBean implements LabelProvider {
       case "DELETE":
         return "danger";
       default:
-        return "default";
+        return "secondary";
     }
   }
 
@@ -455,15 +450,27 @@ public class WadlBean implements LabelProvider {
 
     System.out.println("DEBUG getLabel " + key);
 //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    return key;
+    return "<code>" + key + "</code>";
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public String getDescription(String key) {
-    System.out.println("DEBUG getLabel " + key);
+  public String getLabel(String method, String parameter) {
+//     Helper method to log a warning if a requested name is not found. This helps
+//    when developing a WADL labels file.
+    System.out.println("DEBUG getLabel " + method + "-" + parameter);
+//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return "<code>" + method + "-" + parameter + "</code>";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getMethodDescription(String key) {
+    System.out.println("DEBUG getMethodDescription " + key);
 // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     return "<p>" + key + "</p>";
   }
