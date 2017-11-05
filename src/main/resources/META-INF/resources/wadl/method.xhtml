@@ -48,79 +48,67 @@
               </p>
 
               <h:panelGroup rendered="#{wadlBean.findMethodParameters(cc.attrs.method).size() > 0}">
-                <table class="table table-sm">
-                  <tr>
-                    <td width="20%">Name</td>
-                    <td width="50%">Description</td>
-                    <td>Class</td>
-                    <td>Type</td>
-                  </tr>
-                  <ui:repeat value="#{wadlBean.findMethodParameters(cc.attrs.method)}" var="p">
-                    <tr>
-                      <th> #{p.name} </th>
-                      <td>
-                        <h:outputText value="#{p.path}" styleClass="text-bold d-block" rendered="#{p.path ne null}"/>
-                        <h:outputText value="Default = #{p.default}" styleClass="text-bold d-block" rendered="#{p.default ne null}"/>
-                        #{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, p.name)}
-                      </td>
-                      <td class="text-capitalize">#{p.type.localPart}</td>
-                      <td class="text-lowercase">#{p.style}</td>
-                    </tr>
-                  </ui:repeat>
-                </table>
+                <hr/>
+                <label class="text-small">Request parameters</label>
+                <ui:repeat value="#{wadlBean.findMethodParameters(cc.attrs.method)}" var="p">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <span class="text-bold"> #{p.name} </span>
+                      <h:outputText value="#{p.path}" styleClass="text-code mx-2" rendered="#{p.path ne null}"/>
+                      <h:outputText value="Default = #{p.default}" styleClass="text-code mx-2" rendered="#{p.default ne null}"/>
+                    </div>
+                    <div>
+                      <span class="badge badge-info">#{p.type.localPart}</span>
+                      <span class="badge badge-secondary text-lowercase"> #{p.style} </span>
+                    </div>
+                  </div>
+
+                  <h:outputText value="#{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, p.name)}" escape="false" styleClass="ml-3"/>
+
+                </ui:repeat>
+
               </h:panelGroup>
 
+
               <h:panelGroup rendered="#{wadlBean.isPutOrPost(cc.attrs.method)}">
+                <hr/>
                 <!--Request objects are only valid for PUT or POST operations-->
-                <label>Request</label>
+                <label class="text-small">Post parameters</label>
                 <h:panelGroup rendered="#{empty wadlBean.findMethodRequestElements(cc.attrs.method).entrySet().toArray()}">
-                  <p>
-                    Post parameters are submitted <code>application/x-www-form-urlencoded</code>
+                  <p class="ml-3">
+                    Parameters are submitted as <code>application/x-www-form-urlencoded</code>
                   </p>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{not empty wadlBean.findMethodRequestElements(cc.attrs.method).entrySet().toArray()}">
-                  <table class="table table-sm">
-                    <tr>
-                      <td width="20%">Element</td>
-                      <td width="50%">Description</td>
-                      <td>Encoding</td>
-                    </tr>
-                    <ui:repeat value="#{wadlBean.findMethodRequestElements(cc.attrs.method).entrySet().toArray()}" var="mvmap">
-                      <tr>
-                        <th> #{mvmap.key} </th>
-                        <td> #{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, mvmap.key)} </td>
-                        <td>
-                          <ui:repeat value="#{mvmap.value}" var="rep">
-                            <span class="badge badge-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
-                          </ui:repeat>
-                        </td>
-                      </tr>
-                    </ui:repeat>
-                  </table>
+                  <ui:repeat value="#{wadlBean.findMethodRequestElements(cc.attrs.method).entrySet().toArray()}" var="mvmap">
+                    <div class="d-flex justify-content-between">
+                      <span class="d-block text-bold"> #{mvmap.key} </span>
+                      <div>
+                        <ui:repeat value="#{mvmap.value}" var="rep">
+                          <span class="d-block badge badge-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
+                        </ui:repeat>
+                      </div>
+                    </div>
+                    <h:outputText value="#{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, mvmap.key)}" escape="false" styleClass="ml-3"/>
+                  </ui:repeat>
                 </h:panelGroup>
               </h:panelGroup>
 
-              <label>Response</label>
-              <table class="table table-sm">
-                <tr>
-                  <td width="20%">HTTP</td>
-                  <td width="50%">Element</td>
-                  <td>Encoding</td>
-                </tr>
-                <ui:repeat value="#{cc.attrs.method.response}" var="r">
-                  <ui:repeat value="#{wadlBean.findMethodResponseElements(r).entrySet().toArray()}" var="mvmap">
-                    <tr>
-                      <th> #{r.status.size() == 0? '200' : r.status} </th>
-                      <td> #{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, mvmap.key)} </td>
-                      <td>
-                        <ui:repeat value="#{mvmap.value}" var="rep">
-                          <span class="badge badge-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
-                        </ui:repeat>
-                      </td>
-                    </tr>
-                  </ui:repeat>
+              <hr/>
+              <label class="text-small">Response parameters</label>
+              <ui:repeat value="#{cc.attrs.method.response}" var="r">
+                <ui:repeat value="#{wadlBean.findMethodResponseElements(r).entrySet().toArray()}" var="mvmap">
+                  <div class="d-flex justify-content-between">
+                    <span class="d-block text-bold"> HTTP #{r.status.size() == 0? '200' : r.status} </span>
+                    <div>
+                      <ui:repeat value="#{mvmap.value}" var="rep">
+                        <span class="d-block badge badge-#{wadlBean.buildCSSType(rep.mediaType)}">#{rep.mediaType}</span>
+                      </ui:repeat>
+                    </div>
+                  </div>
+                  <h:outputText value="#{cc.attrs.labelProvider.getLabel(cc.attrs.method.id, mvmap.key)}" escape="false" styleClass="ml-3"/>
                 </ui:repeat>
-              </table>
+              </ui:repeat>
 
             </div>
 
