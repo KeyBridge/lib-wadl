@@ -16,12 +16,12 @@
  */
 package ch.keybridge.lib.wadl;
 
-import ch.keybridge.lib.xml.JaxbUtility;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +29,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -65,6 +70,10 @@ public abstract class AbstractWadlBean implements LabelProvider {
    * Creates a new instance of WadlBean
    */
   public AbstractWadlBean() {
+    /**
+     * Disable SSL handshake.
+     */
+    System.setProperty("jsse.enableSNIExtension", "false");
   }
 
   /**
@@ -155,38 +164,41 @@ public abstract class AbstractWadlBean implements LabelProvider {
      */
     try {
       /**
-       * Read the WADL URI from the FacesContext. The WADL URI should be
-       * configured in the link.properties file as a 'wadl=' entry.
+       * Read the WADL file.
        */
-//      FacesContext context = FacesContext.getCurrentInstance();
-//      String uri = context.getApplication().evaluateExpressionGet(context, "#{link.wadl}", String.class);
-      /**
-       * If the URI is not declared in the link file then try to get it as a
-       * query param.
-       */
-//      System.out.println("DEBUG init wadl from link.properties " + uri);
-//      if (uri == null || uri.isEmpty()) {
-//      uri = context.getApplication().evaluateExpressionGet(context, "#{param['wadl']}", String.class);
-//      System.out.println("DEBUG read WADL URI from query parameter " + uri);
-//      }
       if (wadl == null || wadl.isEmpty()) {
         LOGGER.severe("Null or empty wadl URL.");
         throw new Exception("Null or empty wadl URL.");
       }
-      String wadlFile;
-      URL url = new URL(wadl);
-      try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
-        StringBuilder sb = new StringBuilder();
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-          sb.append(inputLine);
-        }
-        wadlFile = sb.toString();
+      /**
+       * Try to use an all-trusting trust manager that ignores all SSL errors.
+       */
+      Client client;
+      try {
+        SSLContext sslcontext = SSLContext.getInstance("TLS");
+        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+          @Override
+          public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+          }
+
+          @Override
+          public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+          }
+
+          @Override
+          public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+          }
+
+        }}, new java.security.SecureRandom());
+        client = ClientBuilder.newBuilder().sslContext(sslcontext).hostnameVerifier((s1, s2) -> true).build();
+      } catch (NoSuchAlgorithmException | KeyManagementException noSuchAlgorithmException) {
+        client = ClientBuilder.newClient();
       }
       /**
-       * Unmarshal the application from the WADL file.
+       * Read and unmarshal the application from the WADL file.
        */
-      this.application = JaxbUtility.unmarshal(wadlFile, Application.class);
+      this.application = client.target(wadl).request().get(Application.class);
       /**
        * Call PostLoad to set the inter-object parent/child relationships.
        */
