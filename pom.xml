@@ -46,7 +46,7 @@
     <dependency>
       <groupId>keybridge.lib</groupId>
       <artifactId>xml-adapter</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>

@@ -13,7 +13,7 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.xml.JaxbUtility;
+import ch.keybridge.xml.JaxbUtility;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
