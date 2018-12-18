@@ -13,7 +13,7 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.xml.JaxbUtility;
+import ch.keybridge.lib.xml.JaxbUtility;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;

@@ -13,7 +13,7 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.xml.JaxbUtility;
+import ch.keybridge.lib.xml.JaxbUtility;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
