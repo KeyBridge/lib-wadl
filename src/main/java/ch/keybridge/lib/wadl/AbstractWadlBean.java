@@ -54,7 +54,7 @@ import net.java.dev.wadl.*;
  */
 public abstract class AbstractWadlBean implements LabelProvider {
 
-  private static final Logger LOGGER = Logger.getLogger(AbstractWadlBean.class.getName());
+  private static final Logger LOG = Logger.getLogger(AbstractWadlBean.class.getName());
 
   /**
    * The current WADL URL.
@@ -107,7 +107,7 @@ public abstract class AbstractWadlBean implements LabelProvider {
     try {
       downloadWADL(wadlUrl);
     } catch (Exception exception) {
-      LOGGER.severe(exception.getMessage());
+      LOG.severe(exception.getMessage());
     }
   }
 
@@ -137,17 +137,14 @@ public abstract class AbstractWadlBean implements LabelProvider {
       .append(context.getRequestContextPath())
       .toString();
     /**
-     * Try to load the WADL from either "/rest" (the Key Bridge default) or
-     * /resources (the NetBeans default).
+     * Try to load the WADL from various commonly used JAXRS contexts. If the
+     * application declares a custom context is must be specified.
      */
-    load(contextPath + "/rest/application.wadl");
-    if (application == null) {
-      LOGGER.fine("WADL not found under 'rest' path. Trying 'api'");
-      load(contextPath + "/api/application.wadl");
-    }
-    if (application == null) {
-      LOGGER.fine("WADL not found under 'rest' or api' path. Trying 'resources'");
-      load(contextPath + "/resources/application.wadl");
+    for (String restContext : new String[]{"api", "rest", "resource", "resources", "webresources"}) {
+      load(contextPath + "/" + restContext + "/application.wadl");
+      if (wadl != null) {
+        break;
+      }
     }
   }
 
@@ -167,7 +164,7 @@ public abstract class AbstractWadlBean implements LabelProvider {
        * Read the WADL file.
        */
       if (wadl == null || wadl.isEmpty()) {
-        LOGGER.severe("Null or empty wadl URL.");
+        LOG.severe("Null or empty wadl URL.");
         throw new Exception("Null or empty wadl URL.");
       }
       /**
@@ -208,9 +205,9 @@ public abstract class AbstractWadlBean implements LabelProvider {
        */
       this.wadl = wadl;
     } catch (MalformedURLException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOG.log(Level.SEVERE, null, ex);
     } catch (IOException | JAXBException ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOG.log(Level.SEVERE, null, ex);
     }
   }
 
@@ -347,7 +344,7 @@ public abstract class AbstractWadlBean implements LabelProvider {
         });
       }
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "findMethodRequestElements ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
+      LOG.log(Level.SEVERE, "findMethodRequestElements ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
     }
     return elementMediaTypes;
   }
@@ -370,7 +367,7 @@ public abstract class AbstractWadlBean implements LabelProvider {
                               representation);
       });
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "findMethodResponseElements ERROR.  {0}", e.getMessage());
+      LOG.log(Level.SEVERE, "findMethodResponseElements ERROR.  {0}", e.getMessage());
     }
     return elementMediaTypes;
   }
@@ -389,7 +386,7 @@ public abstract class AbstractWadlBean implements LabelProvider {
         parameterList.addAll(method.getRequest().getParam());
       }
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "findMethodParameters ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
+      LOG.log(Level.SEVERE, "findMethodParameters ERROR for method {0}.  {1}", new Object[]{method.getId(), e.getMessage()});
     }
     return parameterList;
   }
@@ -457,11 +454,11 @@ public abstract class AbstractWadlBean implements LabelProvider {
    */
   @Override
   public String getLabel(String key) {
-//     Helper method to log a warning if a requested name is not found. This helps
-//    when developing a WADL labels file.
-
-    System.out.println("DEBUG getLabel " + key);
-//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Abstract helper method to log if a requested name is not found. This
+     * helps when developing a WADL labels file.
+     */
+    LOG.log(Level.INFO, "AbstractWadlBean getLabel {0}", key);
     return "<code>" + key + "</code>";
   }
 
@@ -470,10 +467,11 @@ public abstract class AbstractWadlBean implements LabelProvider {
    */
   @Override
   public String getLabel(String method, String parameter) {
-//     Helper method to log a warning if a requested name is not found. This helps
-//    when developing a WADL labels file.
-    System.out.println("DEBUG getLabel " + method + "-" + parameter);
-//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Abstract helper method to log if a requested name is not found. This
+     * helps when developing a WADL labels file.
+     */
+    LOG.log(Level.INFO, "AbstractWadlBean getLabel {0}-{1}", new Object[]{method, parameter});
     return "<code>" + method + "-" + parameter + "</code>";
   }
 
@@ -482,8 +480,11 @@ public abstract class AbstractWadlBean implements LabelProvider {
    */
   @Override
   public String getMethodDescription(String key) {
-    System.out.println("DEBUG getMethodDescription " + key);
-// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Abstract helper method to log if a requested name is not found. This
+     * helps when developing a WADL labels file.
+     */
+    LOG.log(Level.INFO, "AbstractWadlBean getMethodDescription {0}", key);
     return "<p>" + key + "</p>";
   }
 
