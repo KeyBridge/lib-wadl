@@ -33,7 +33,7 @@
     v0.5.0 - rewrite method display without tables
     v0.5.1 - update xml-adapter version 07/03/18
     v0.5.2 - bump dependencies; make xml-adapter provided
-    v0.5.3 - improve logging, default WADL location is under "resources" context
+    v0.5.3 - improve logging, try to load WADL file from various common locations
 
 
 
