@@ -16,7 +16,7 @@ way back in 31 August 2009: [http://www.w3.org/Submission/wadl/](http://www.w3.o
 A normative XML schema for the WADL vocabulary can be found at
 [wadl.xsd](https://www.w3.org/Submission/wadl/wadl.xsd)
 
-## About ()and justification)
+## About (and justification)
 
 Java Jersey does not implements the bare minimum required WADL specification
 components. Important components such as _documentation_ are completely omitted,
@@ -26,7 +26,7 @@ useful.
 Frameworks such as [Swagger](http://swagger.io) and [RAML](http://raml.org)
 have filled this gap by inventing, from whole cloth, new API generation, consuming
 and documentation strategies. We think these are useful but superfluous for our needs.
-Jackson is just fine, it just needs a decoration.
+Jackson is just fine but needs a little decoration.
 
 In this utility we use Jackson to provide a standard WADL file (the "wattle"). We
 then enhance the WADL information with supplemental documentation (the "daub")
@@ -52,18 +52,21 @@ W3C Member Submission 31 August 2009
 Latest version: http://www.w3.org/Submission/wadl/
 
 **XML Schema for WADL**
+
 A normative XML schema for the WADL vocabulary can be found at
 https://www.w3.org/Submission/wadl/wadl.xsd
+
+## Basic Usage (the "wattle")
 
 _Update for version 1.0.0_
 
 JSF components have been removed to make this a pure data processing library.
+The following components are no longer included. If desired you can sill find them in 
+previous git snapshots.
 
+    ~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~  
+    ~~3. a JSF managed bean supporting the composite component~~
 
-~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~
-~~3. a JSF managed bean supporting the composite component~~
-
-## Basic Usage (the "wattle")
 
 See the unit tests. Basically you can use this data model to easily
 parse any `application.wadl` file published by the Jersey REST library.
