@@ -38,14 +38,15 @@ This library includes:
 
 
 The application element forms the root of a WADL description and contains the following:
-    * Zero or more doc elements
-    * An optional grammars element
-    * Zero or more resources elements
-    * Zero or more of the following:
-        * resource_type elements
-        * method elements
-        * representation elements
-        * param elements
+
+  * Zero or more doc elements
+  * An optional grammars element
+  * Zero or more resources elements
+  * Zero or more of the following:
+      * resource_type elements
+      * method elements
+      * representation elements
+      * param elements
 
 W3C Member Submission 31 August 2009
 Latest version: http://www.w3.org/Submission/wadl/
