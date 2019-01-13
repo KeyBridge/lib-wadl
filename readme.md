@@ -64,8 +64,8 @@ JSF components have been removed to make this a pure data processing library.
 The following components are no longer included. If desired you can sill find them in 
 previous git snapshots.
 
-    ~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~  
-    ~~3. a JSF managed bean supporting the composite component~~
+~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~   
+~~3. a JSF managed bean supporting the composite component~~
 
 
 See the unit tests. Basically you can use this data model to easily
