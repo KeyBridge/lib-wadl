@@ -16,7 +16,7 @@ way back in 31 August 2009: [http://www.w3.org/Submission/wadl/](http://www.w3.o
 A normative XML schema for the WADL vocabulary can be found at
 [wadl.xsd](https://www.w3.org/Submission/wadl/wadl.xsd)
 
-## About ()and justification)
+## About <small> and justification </small>
 
 Java Jersey does not implements the bare minimum required WADL specification
 components. Important components such as _documentation_ are completely omitted,
@@ -35,60 +35,58 @@ to provide a complete RESTful API autodocumentation resource. Simple and easy.
 This library includes:
 
 1. a complete implementation of the WADL object model
-
-
-The application element forms the root of a WADL description and contains the following:
-    - Zero or more doc elements
-    - An optional grammars element
-    - Zero or more resources elements
-    - Zero or more of the following:
-        - resource_type elements
-        - method elements
-        - representation elements
-        - param elements
-
-W3C Member Submission 31 August 2009
-Latest version: http://www.w3.org/Submission/wadl/
-
-**XML Schema for WADL**
-A normative XML schema for the WADL vocabulary can be found at
-https://www.w3.org/Submission/wadl/wadl.xsd
-
-_Update for version 1.0.0_
-
-JSF components have been removed to make this a pure data processing library.
-
-
-~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~
-~~3. a JSF managed bean supporting the composite component~~
+2. a JSF Composite Component to pretty-print WADL methods in HTML
+3. a JSF managed bean supporting the composite component
 
 ## Basic Usage (the "wattle")
 
-See the unit tests. Basically you can use this data model to easily
-parse any `application.wadl` file published by the Jersey REST library.
+This resource is designed for web applications using Java Server Faces.
 
-```java
-// Identify the WADL file
-URL url = getClass().getClassLoader().getResource("wadl/application.wadl");
-// Read the WADL file into a String 
-String wadlFile = new String(Files.readAllBytes(Paths.get(url.toURI())));
-// Unmarshal the WADL file content to an Application instance.
-Application application = XmlUtil.unmarshal(wadlFile, Application.class);
-// Its good practice to call postLoad() on the application. This sets up
-// internal parent/child links for easier software object traversal
-application.postLoad();
-// Now you can examine the Application description
-// For exampe: parse a REST resource 
-String path = "rest-path";
-Resource resource = application.findResource(path);
-... .
+1. Add this library as a dependency to your JavaEE 7 web application.
 
-```
+2. In faces-config.xml, add a **link** resource bundle. e.g.:
+<pre>
+  &lt;resource-bundle&gt;
+    &lt;base-name&gt;faces.link&lt;/base-name&gt;
+    &lt;var&gt;link&lt;/var&gt;
+  &lt;/resource-bundle&gt;</pre>
 
+3. In the link.properties file, add an entry pointing to the WADL file. e.g.
+<pre>
+  wadl=http://[rest-resource]/application.wadl</pre>
+
+4. In a JSF page, add the WADL CSS and use the WADL component. e.g.
+<pre>
+  &lt;link rel="stylesheet" href="wadl.css"/&gt;
+
+  &lt;ui:repeat value="#{wadlBean.findMethods(param['path'])}" var="m"&gt;
+    &lt;wadl:method method="#{m}"
+              verbose="true"
+              collapsible="true"/&gt;
+  &lt;/ui:repeat&gt;</pre>
+
+A copy of the required **wadl.css** is provided in the **doc/example** directory.
+An example page showing how to use this component is also provided in the **doc/example**
+directory.
+
+More: Familiarize yourself with the WADL specification then inspect the **WadlBean**
+managed bean for more information examples.
+
+## Enhancements (the "Daub")
+
+Java Jackson WADL files presently do not include the **Doc** element, and so are
+sorely lacking in useful documentation and labels. To fill this requirement create
+an instance of the **LabelProvider** interface and identify this in your wadl component.
+
+<pre>
+    &lt;wadl:method method="#{m}"
+              verbose="true"
+              labelProvider="#{myLabelProviderBean}"
+              collapsible="true"/&gt;</pre>
 
 ## License = GPL 3.0
 
-Copyright (C) 2017-2019 Key Bridge LLC
+Copyright (C) 2017 Key Bridge LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
