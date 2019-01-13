@@ -3,22 +3,33 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>keybridge.lib</groupId>
   <artifactId>wadl</artifactId>
-  <version>0.5.3</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
-  <name>lib-wadl</name>
-  <description>Web Application Description Language
-    W3C Member Submission 31 August 2009
-    Latest version:
-    http://www.w3.org/Submission/wadl/
 
-    WADL is designed to provide a machine process-able description of
+  <name>lib-wadl</name>
+  <description> WADL file parser and automated documentation generator
+
+    Web Application Description Language (WADL) is a specification
+    designed to provide a machine processable description of
     HTTP-based Web applications. A normative XML schema for the WADL
     vocabulary can be found at https://www.w3.org/Submission/wadl/wadl.xsd
+
+    The application element forms the root of a WADL description and contains the following:
+    - Zero or more doc elements
+    - An optional grammars element
+    - Zero or more resources elements
+    - Zero or more of the following:
+    - - resource_type elements
+    - - method elements
+    - - representation elements
+    - - param elements
+
+    W3C Member Submission 31 August 2009
+    Latest version: http://www.w3.org/Submission/wadl/
+
+    XML Schema for WADL
+    A normative XML schema for the WADL vocabulary can be found at
+    https://www.w3.org/Submission/wadl/wadl.xsd
 
     History:
 
@@ -34,7 +45,8 @@
     v0.5.1 - update xml-adapter version 07/03/18
     v0.5.2 - bump dependencies; make xml-adapter provided
     v0.5.3 - improve logging, try to load WADL file from various common locations
-
+    v0.6.0 - update wadl bean to correctly handle form encoding; rewrite jsf component
+    v1.0.0 - remove jave-ee dependency; move JSF content lib-faces-common; release
 
 
   </description>
@@ -44,12 +56,20 @@
     <url>http://keybridge.ch</url>
   </organization>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
   <dependencies>
+
     <dependency>
-      <groupId>keybridge.lib</groupId>
-      <artifactId>xml-adapter</artifactId>
-      <version>2.0.3</version>
-      <type>jar</type>
+      <!--required for Jersey rest client to retrieve application.wadl file-->
+      <!--marked provided as this is expected to be used in a web application context-->
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.0.1</version>
       <scope>provided</scope>
     </dependency>
 
@@ -59,21 +79,6 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-      <version>2.0.1</version>
-      <scope>test</scope>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>javax</groupId>
-      <artifactId>javaee-web-api</artifactId>
-      <version>7.0</version>
-      <type>jar</type>
-      <scope>provided</scope>
-    </dependency>
-
   </dependencies>
 
   <distributionManagement>

@@ -13,7 +13,6 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.xml.JaxbUtility;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
@@ -26,7 +25,7 @@ import org.junit.Test;
 public class ResponseTest {
 
   @Test
-  public void testResponse() throws JAXBException {
+  public void testBuildResponse() throws JAXBException {
     Response response = new Response();
     Doc doc = new Doc();
     doc.setTitle("Response documentation Title");
@@ -49,8 +48,7 @@ public class ResponseTest {
 
     System.out.println("Response Build");
 
-    System.out.println(JaxbUtility.marshal(response));
-
+//    System.out.println(JaxbUtility.marshal(response));
   }
 
 }

@@ -13,7 +13,6 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.xml.JaxbUtility;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,7 +35,7 @@ public class MethodTest {
     URL url = getClass().getClassLoader().getResource("wadl/application.wadl");
 //    URL url = getClass().getClassLoader().getResource("wadl/amazonsearch.wadl");
     String wadlFile = new String(Files.readAllBytes(Paths.get(url.toURI())));
-    Application application = JaxbUtility.unmarshal(wadlFile, Application.class);
+    Application application = XmlUtil.unmarshal(wadlFile, Application.class);
     application.postLoad();
     assert application != null;
     System.out.println("Unmarshal WADL XML to Application Entity OK");

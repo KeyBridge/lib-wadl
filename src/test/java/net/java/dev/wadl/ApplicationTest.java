@@ -13,7 +13,6 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.xml.JaxbUtility;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -40,13 +39,13 @@ public class ApplicationTest {
     /**
      * Unmarshal the string to an Application.
      */
-    Application application = JaxbUtility.unmarshal(wadlFile, Application.class);
+    Application application = XmlUtil.unmarshal(wadlFile, Application.class);
     assert application != null;
     System.out.println("Unmarshal WADL XML to Application Entity OK");
     /**
      * Marshal the Application to a string.
      */
-    String applicationXml = JaxbUtility.marshal(application);
+    String applicationXml = XmlUtil.marshal(application);
     assert applicationXml != null;
 
     System.out.println("Marshal Application Entity to WADL XML OK");
@@ -63,7 +62,7 @@ public class ApplicationTest {
     /**
      * Unmarshal the string to an Application.
      */
-    Application application = JaxbUtility.unmarshal(wadlFile, Application.class);
+    Application application = XmlUtil.unmarshal(wadlFile, Application.class);
 
     /**
      * Get the top-level Resources
