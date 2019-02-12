@@ -5,7 +5,7 @@
   <artifactId>wadl</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
-
+ 
   <name>lib-wadl</name>
   <description> WADL file parser and automated documentation generator
 
@@ -46,32 +46,27 @@
     v0.5.2 - bump dependencies; make xml-adapter provided
     v0.5.3 - improve logging, try to load WADL file from various common locations
     v0.6.0 - update wadl bean to correctly handle form encoding; rewrite jsf component
-    v1.0.0 - remove jave-ee dependency; move JSF content lib-faces-common; release
-
+    v1.0.0 - remove jave-ee dependency; move JSF content to lib-faces-common; release
 
   </description>
 
-  <organization>
-    <name>Key Bridge</name>
-    <url>http://keybridge.ch</url>
-  </organization>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
 
-    <dependency>
-      <!--required for Jersey rest client to retrieve application.wadl file-->
-      <!--marked provided as this is expected to be used in a web application context-->
+    <!--required for Jersey rest client to retrieve the application.wadl file-->
+    <!--marked provided as this library is expected to be used in a web application context-->
+    <!--@since 02/11/19 - not needed -->
+    <!--    <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>javax.ws.rs-api</artifactId>
       <version>2.0.1</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
 
     <dependency>
       <groupId>junit</groupId>
@@ -80,12 +75,5 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <distributionManagement>
-    <repository>
-      <id>${repository.name}</id>
-      <url>${repository.url}</url>
-    </repository>
-  </distributionManagement>
 
 </project>

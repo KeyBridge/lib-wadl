@@ -13,7 +13,6 @@
  */
 package net.java.dev.wadl;
 
-import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import org.junit.Test;
@@ -38,12 +37,12 @@ public class ResponseTest {
 
     Representation representationXml = new Representation();
     representationXml.setElement(new QName("GISFeature"));
-    representationXml.setMediaType(MediaType.APPLICATION_XML);
+    representationXml.setMediaType("application/xml");
     response.getRepresentation().add(representationXml);
 
     Representation representationJson = new Representation();
     representationXml.setElement(new QName("GISFeature"));
-    representationJson.setMediaType(MediaType.APPLICATION_JSON);
+    representationJson.setMediaType("application/xml");
     response.getRepresentation().add(representationJson);
 
     System.out.println("Response Build");
