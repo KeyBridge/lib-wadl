@@ -5,7 +5,7 @@
   <artifactId>wadl</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
- 
+
   <name>lib-wadl</name>
   <description> WADL file parser and automated documentation generator
 
@@ -75,5 +75,12 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>${repository.name}</id>
+      <url>${repository.url}</url>
+    </repository>
+  </distributionManagement>
 
 </project>
