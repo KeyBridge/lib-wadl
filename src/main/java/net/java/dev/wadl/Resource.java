@@ -16,7 +16,7 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.wadl.PathProvider;
+import ch.keybridge.wadl.PathProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

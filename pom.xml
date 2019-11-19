@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>keybridge.lib</groupId>
   <artifactId>wadl</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>lib-wadl</name>
@@ -46,8 +46,9 @@
     v0.5.2 - bump dependencies; make xml-adapter provided
     v0.5.3 - improve logging, try to load WADL file from various common locations
     v0.6.0 - update wadl bean to correctly handle form encoding; rewrite jsf component
-    v1.0.0 - remove jave-ee dependency; move JSF content to lib-faces-common; release
 
+    v1.0.0 - remove jave-ee dependency; move JSF content to lib-faces-common; release
+    v1.1.0 - refactor all in to 'ch.keybridge.wadl' base package
   </description>
 
 

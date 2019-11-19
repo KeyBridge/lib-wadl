@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2017 Key Bridge LLC
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  */
 package net.java.dev.wadl;
 
-import ch.keybridge.lib.wadl.PathProvider;
+import ch.keybridge.wadl.PathProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
