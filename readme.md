@@ -26,7 +26,7 @@ useful.
 Frameworks such as [Swagger](http://swagger.io) and [RAML](http://raml.org)
 have filled this gap by inventing, from whole cloth, new API generation, consuming
 and documentation strategies. We think these are useful but superfluous for our needs.
-Jackson is just fine but needs a little decoration.
+Jackson is just fine and only needs a little decoration.
 
 In this utility we use Jackson to provide a standard WADL file (the "wattle"). We
 then enhance the WADL information with supplemental documentation (the "daub")
@@ -35,7 +35,6 @@ to provide a complete RESTful API autodocumentation resource. Simple and easy.
 This library includes:
 
 1. a complete implementation of the WADL object model
-
 
 The application element forms the root of a WADL description and contains the following:
 
@@ -48,13 +47,14 @@ The application element forms the root of a WADL description and contains the fo
       * representation elements
       * param elements
 
-W3C Member Submission 31 August 2009
-Latest version: http://www.w3.org/Submission/wadl/
+@see [W3C Member Submission 31 August 2009](http://www.w3.org/Submission/wadl/)
+
 
 **XML Schema for WADL**
 
-A normative XML schema for the WADL vocabulary can be found at
-https://www.w3.org/Submission/wadl/wadl.xsd
+A normative XML schema for the WADL vocabulary can be found [here](https://www.w3.org/Submission/wadl/wadl.xsd). 
+A local copy is also included in the docs directory of this library.
+
 
 ## Basic Usage (the "wattle")
 
@@ -67,7 +67,6 @@ previous git snapshots.
 ~~2. a JSF Composite Component to pretty-print WADL methods in HTML~~   
 ~~3. a JSF managed bean supporting the composite component~~
 
-
 See the unit tests. Basically you can use this data model to easily
 parse any `application.wadl` file published by the Jersey REST library.
 
@@ -79,10 +78,10 @@ String wadlFile = new String(Files.readAllBytes(Paths.get(url.toURI())));
 // Unmarshal the WADL file content to an Application instance.
 Application application = XmlUtil.unmarshal(wadlFile, Application.class);
 // Its good practice to call postLoad() on the application. This sets up
-// internal parent/child links for easier software object traversal
+// internal parent/child links for easier object model traversal
 application.postLoad();
 // Now you can examine the Application description
-// For exampe: parse a REST resource 
+// For example: to parse a REST resource 
 String path = "rest-path";
 Resource resource = application.findResource(path);
 ... .
